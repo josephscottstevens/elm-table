@@ -4347,7 +4347,6 @@ var author$project$Main$update = F2(
 var author$project$Main$UpdateSearch = function (a) {
 	return {$: 'UpdateSearch', a: a};
 };
-var author$project$Main$edges = {bottom: 0, left: 0, right: 0, top: 0};
 var elm$core$Basics$apR = F2(
 	function (x, f) {
 		return f(x);
@@ -4453,7 +4452,7 @@ var elm$core$Maybe$Just = function (a) {
 var elm$core$Maybe$Nothing = {$: 'Nothing'};
 var elm$core$String$filter = _String_filter;
 var elm$core$String$toLower = _String_toLower;
-var author$project$People$formatString = function (str) {
+var author$project$Common$formatString = function (str) {
 	return A2(
 		elm$core$String$filter,
 		elm$core$Char$isAlpha,
@@ -4551,7 +4550,7 @@ var author$project$People$personToString = function (p) {
 			[p.name, p.phone, p.company, p.address, p.city]));
 };
 var author$project$People$personToStringFormatted = function (person) {
-	return author$project$People$formatString(
+	return author$project$Common$formatString(
 		author$project$People$personToString(person));
 };
 var elm$core$List$filter = F2(
@@ -4573,11 +4572,52 @@ var author$project$Main$filter = F2(
 			function (p) {
 				return A2(
 					elm$core$String$contains,
-					author$project$People$formatString(filterString),
+					author$project$Common$formatString(filterString),
 					author$project$People$personToStringFormatted(p));
 			},
 			people);
 	});
+var author$project$People$Person = F7(
+	function (name, phone, company, address, city, zip, country) {
+		return {address: address, city: city, company: company, country: country, name: name, phone: phone, zip: zip};
+	});
+var author$project$People$people = _List_fromArray(
+	[
+		A7(author$project$People$Person, 'Tyler', '1-325-350-7643', 'Nec Incorporated', '345-1249 Leo Av.', 'Montone', '11819', 'Oman'),
+		A7(author$project$People$Person, 'Addison', '1-919-396-3444', 'Ac Inc.', '141-6364 Amet Road', 'Coinco', '564821', 'Heard Mcdonald Islands'),
+		A7(author$project$People$Person, 'Colin', '1-179-478-8436', 'Augue Sed Incorporated', '4450 Consequat Rd.', 'Piła', '17397', 'Kenya'),
+		A7(author$project$People$Person, 'Marsden', '1-121-280-7045', 'Nascetur Ridiculus Consulting', 'Ap #409-3018 Sed Road', 'Merzig', '2707', 'Iraq'),
+		A7(author$project$People$Person, 'Aubrey', '1-811-581-0929', 'Blandit Industries', '4827 Pellentesque Avenue', 'Randazzo', '35463', 'Equatorial Guinea'),
+		A7(author$project$People$Person, 'Kylee', '1-652-256-8057', 'Lacus Corp.', '9009 Laoreet Rd.', 'Sainte-Marie-Chevigny', 'P5G 9K5', 'Wallis Futuna'),
+		A7(author$project$People$Person, 'Avye', '1-613-847-4640', 'Sed Eu LLP', 'Ap #565-6166 Vel Ave', 'Juiz de Fora', '71003', 'Yemen'),
+		A7(author$project$People$Person, 'Wang', '1-716-808-1478', 'Curabitur Massa Vestibulum Ltd', 'Ap #608-3841 Per St.', 'Castello dell Acqua', '21200', 'Guinea'),
+		A7(author$project$People$Person, 'Karina', '1-334-358-2328', 'Libero Est Institute', 'P.O. Box 210 1669 Malesuada Road', 'Auburn', '5556', 'Mexico'),
+		A7(author$project$People$Person, 'Debra', '1-674-602-3053', 'Donec Egestas Industries', 'P.O. Box 489 6506 Vel Rd.', 'Inuvik', '475230', 'Turkmenistan'),
+		A7(author$project$People$Person, 'Josiah', '1-256-498-3739', 'Aliquam Corp.', '4182 Egestas Rd.', 'Longvilly', '396735', 'Isle of Man'),
+		A7(author$project$People$Person, 'Jasper', '1-827-845-5903', 'Semper Rutrum Fusce Ltd', '620-8800 Enim Ave', 'Campina Grande', '58981', 'Macedonia'),
+		A7(author$project$People$Person, 'Ferdinand', '1-867-979-4649', 'Enim PC', 'P.O. Box 790 9699 Erat. Av.', 'Frankfurt am Main', '51269', 'Suriname'),
+		A7(author$project$People$Person, 'Arsenio', '1-409-812-0418', 'Mauris Morbi Non PC', 'P.O. Box 931 4528 Pellentesque Street', 'Buggenhout', '10608', 'Niue'),
+		A7(author$project$People$Person, 'Colt', '1-608-592-3898', 'Elit Elit Fermentum Company', '5159 Bibendum. Av.', 'Rachecourt', '11891', 'Saint Kitts'),
+		A7(author$project$People$Person, 'Lars', '1-658-502-1947', 'Neque Morbi Inc.', 'Ap #314-4836 Et Avenue', 'Saumur', '482202', 'Honduras'),
+		A7(author$project$People$Person, 'Ignacia', '1-847-573-3631', 'Eros Corp.', 'Ap #984-3029 Dolor St.', 'Bossut-Gottechain', 'K8L8G5', 'French Polynesia'),
+		A7(author$project$People$Person, 'Cassidy', '1-726-787-7788', 'Magna Praesent Interdum Ltd', '970-1817 Elit Rd.', 'Sibret', 'JJ24TH', 'Cape Verde'),
+		A7(author$project$People$Person, 'Cally', '1-908-107-5453', 'Non Luctus Sit Incorporated', '890 Dui. St.', 'Jasper', '60416', 'Comoros'),
+		A7(author$project$People$Person, 'Hop', '1-167-169-1932', 'Sit Institute', 'P.O. Box 352 7837 Mus. Rd.', 'Treguaco', '25036', 'Kenya'),
+		A7(author$project$People$Person, 'Jack', '1-121-183-8448', 'Mollis Ltd', 'Ap #713-7052 Nec Street', 'Zierikzee', '2987', 'Finland'),
+		A7(author$project$People$Person, 'Germane', '1-562-663-7530', 'Per Associates', 'P.O. Box 929 4035 Dolor Rd.', 'Tula', '2415', 'Djibouti'),
+		A7(author$project$People$Person, 'Thor', '1-657-155-7481', 'Enim Etiam Gravida Inc.', 'Ap #706-752 Dictum. Road', 'Ostrowiec Świętokrzyski', '258868', 'Nigeria'),
+		A7(author$project$People$Person, 'Kane', '1-820-440-0811', 'Semper Rutrum Associates', '6435 Praesent Street', 'Sibret', '63983', 'Iran'),
+		A7(author$project$People$Person, 'Kim', '1-244-115-8884', 'Lorem Fringilla Ornare Corp.', 'P.O. Box 150 9911 Maecenas Road', 'Raymond', '21609', 'Turkish Islands'),
+		A7(author$project$People$Person, 'Colt', '1-420-614-0847', 'Nisl Nulla Eu Industries', 'Ap #966-1415 Magna Av.', 'Esneux', '09756', 'Togo'),
+		A7(author$project$People$Person, 'Haley', '1-506-668-5036', 'Tempus Non Foundation', 'P.O. Box 119 5155 Quis St.', 'Melsele', '04706', 'Equatorial Guinea'),
+		A7(author$project$People$Person, 'Ralph', '1-254-537-6541', 'Erat LLP', '305-8188 Quam. St.', 'Chiguayante', '5289', 'Mauritius'),
+		A7(author$project$People$Person, 'Hoyt', '1-811-651-9830', 'Nam Incorporated', 'P.O. Box 834 6620 Amet St.', 'Quillón', '61814', 'Mauritania'),
+		A7(author$project$People$Person, 'Larissa', '1-115-796-4600', 'Odio Tristique Pharetra Industries', 'P.O. Box 391 9405 Auctor Avenue', 'Swan', '41351', 'South Africa'),
+		A7(author$project$People$Person, 'Warren', '1-394-440-0903', 'Nec Tempus Scelerisque Company', '8384 Ridiculus Street', 'Liverpool', '799203', 'Tokelau'),
+		A7(author$project$People$Person, 'Flynn', '1-437-904-7442', 'Nunc Id Ltd', '814-3994 Neque Ave', 'Amsterdam', '79610', 'El Salvador'),
+		A7(author$project$People$Person, 'Merrill', '1-991-142-9657', 'Quisque Inc.', '155-7795 Lacinia Ave', 'Greater Sudbury', 'K2Y3X9', 'Sudan')
+	]);
+var author$project$Common$edges = {bottom: 0, left: 0, right: 0, top: 0};
 var elm$core$Basics$eq = _Utils_equal;
 var elm$core$Basics$modBy = _Basics_modBy;
 var elm$core$String$fromInt = _String_fromNumber;
@@ -4709,7 +4749,7 @@ var mdgriffith$elm_ui$Element$Font$color = function (fontColor) {
 			'color',
 			fontColor));
 };
-var author$project$Main$columnStyle = function (idx) {
+var author$project$Table$columnStyle = function (idx) {
 	var altBackColor = (!A2(elm$core$Basics$modBy, 2, idx)) ? mdgriffith$elm_ui$Element$Background$color(
 		A3(mdgriffith$elm_ui$Element$rgb255, 250, 250, 250)) : mdgriffith$elm_ui$Element$Background$color(
 		A3(mdgriffith$elm_ui$Element$rgb255, 241, 241, 241));
@@ -4719,7 +4759,7 @@ var author$project$Main$columnStyle = function (idx) {
 			A3(mdgriffith$elm_ui$Element$rgb255, 221, 221, 221)),
 			mdgriffith$elm_ui$Element$Border$widthEach(
 			_Utils_update(
-				author$project$Main$edges,
+				author$project$Common$edges,
 				{top: 1})),
 			mdgriffith$elm_ui$Element$Border$solid,
 			mdgriffith$elm_ui$Element$Font$color(
@@ -9921,7 +9961,7 @@ var mdgriffith$elm_ui$Element$text = function (content) {
 };
 var mdgriffith$elm_ui$Internal$Flag$fontWeight = mdgriffith$elm_ui$Internal$Flag$flag(13);
 var mdgriffith$elm_ui$Element$Font$bold = A2(mdgriffith$elm_ui$Internal$Model$Class, mdgriffith$elm_ui$Internal$Flag$fontWeight, mdgriffith$elm_ui$Internal$Style$classes.bold);
-var author$project$Main$stringColumn = F2(
+var author$project$Table$stringColumn = F2(
 	function (headerString, data) {
 		return {
 			header: A2(
@@ -9932,7 +9972,7 @@ var author$project$Main$stringColumn = F2(
 						A3(mdgriffith$elm_ui$Element$rgb255, 55, 55, 55)),
 						mdgriffith$elm_ui$Element$Border$widthEach(
 						_Utils_update(
-							author$project$Main$edges,
+							author$project$Common$edges,
 							{bottom: 1})),
 						mdgriffith$elm_ui$Element$Border$solid,
 						A2(mdgriffith$elm_ui$Element$paddingXY, 10, 8),
@@ -9943,90 +9983,18 @@ var author$project$Main$stringColumn = F2(
 				function (idx, t) {
 					return A2(
 						mdgriffith$elm_ui$Element$el,
-						author$project$Main$columnStyle(idx),
+						author$project$Table$columnStyle(idx),
 						mdgriffith$elm_ui$Element$text(
 							data(t)));
 				}),
 			width: mdgriffith$elm_ui$Element$fill
 		};
 	});
-var author$project$People$Person = F7(
-	function (name, phone, company, address, city, zip, country) {
-		return {address: address, city: city, company: company, country: country, name: name, phone: phone, zip: zip};
-	});
-var author$project$People$people = _List_fromArray(
-	[
-		A7(author$project$People$Person, 'Tyler', '1-325-350-7643', 'Nec Incorporated', '345-1249 Leo Av.', 'Montone', '11819', 'Oman'),
-		A7(author$project$People$Person, 'Addison', '1-919-396-3444', 'Ac Inc.', '141-6364 Amet Road', 'Coinco', '564821', 'Heard Mcdonald Islands'),
-		A7(author$project$People$Person, 'Colin', '1-179-478-8436', 'Augue Sed Incorporated', '4450 Consequat Rd.', 'Piła', '17397', 'Kenya'),
-		A7(author$project$People$Person, 'Marsden', '1-121-280-7045', 'Nascetur Ridiculus Consulting', 'Ap #409-3018 Sed Road', 'Merzig', '2707', 'Iraq'),
-		A7(author$project$People$Person, 'Aubrey', '1-811-581-0929', 'Blandit Industries', '4827 Pellentesque Avenue', 'Randazzo', '35463', 'Equatorial Guinea'),
-		A7(author$project$People$Person, 'Kylee', '1-652-256-8057', 'Lacus Corp.', '9009 Laoreet Rd.', 'Sainte-Marie-Chevigny', 'P5G 9K5', 'Wallis Futuna'),
-		A7(author$project$People$Person, 'Avye', '1-613-847-4640', 'Sed Eu LLP', 'Ap #565-6166 Vel Ave', 'Juiz de Fora', '71003', 'Yemen'),
-		A7(author$project$People$Person, 'Wang', '1-716-808-1478', 'Curabitur Massa Vestibulum Ltd', 'Ap #608-3841 Per St.', 'Castello dell Acqua', '21200', 'Guinea'),
-		A7(author$project$People$Person, 'Karina', '1-334-358-2328', 'Libero Est Institute', 'P.O. Box 210 1669 Malesuada Road', 'Auburn', '5556', 'Mexico'),
-		A7(author$project$People$Person, 'Debra', '1-674-602-3053', 'Donec Egestas Industries', 'P.O. Box 489 6506 Vel Rd.', 'Inuvik', '475230', 'Turkmenistan'),
-		A7(author$project$People$Person, 'Josiah', '1-256-498-3739', 'Aliquam Corp.', '4182 Egestas Rd.', 'Longvilly', '396735', 'Isle of Man'),
-		A7(author$project$People$Person, 'Jasper', '1-827-845-5903', 'Semper Rutrum Fusce Ltd', '620-8800 Enim Ave', 'Campina Grande', '58981', 'Macedonia'),
-		A7(author$project$People$Person, 'Ferdinand', '1-867-979-4649', 'Enim PC', 'P.O. Box 790 9699 Erat. Av.', 'Frankfurt am Main', '51269', 'Suriname'),
-		A7(author$project$People$Person, 'Arsenio', '1-409-812-0418', 'Mauris Morbi Non PC', 'P.O. Box 931 4528 Pellentesque Street', 'Buggenhout', '10608', 'Niue'),
-		A7(author$project$People$Person, 'Colt', '1-608-592-3898', 'Elit Elit Fermentum Company', '5159 Bibendum. Av.', 'Rachecourt', '11891', 'Saint Kitts'),
-		A7(author$project$People$Person, 'Lars', '1-658-502-1947', 'Neque Morbi Inc.', 'Ap #314-4836 Et Avenue', 'Saumur', '482202', 'Honduras'),
-		A7(author$project$People$Person, 'Ignacia', '1-847-573-3631', 'Eros Corp.', 'Ap #984-3029 Dolor St.', 'Bossut-Gottechain', 'K8L8G5', 'French Polynesia'),
-		A7(author$project$People$Person, 'Cassidy', '1-726-787-7788', 'Magna Praesent Interdum Ltd', '970-1817 Elit Rd.', 'Sibret', 'JJ24TH', 'Cape Verde'),
-		A7(author$project$People$Person, 'Cally', '1-908-107-5453', 'Non Luctus Sit Incorporated', '890 Dui. St.', 'Jasper', '60416', 'Comoros'),
-		A7(author$project$People$Person, 'Hop', '1-167-169-1932', 'Sit Institute', 'P.O. Box 352 7837 Mus. Rd.', 'Treguaco', '25036', 'Kenya'),
-		A7(author$project$People$Person, 'Jack', '1-121-183-8448', 'Mollis Ltd', 'Ap #713-7052 Nec Street', 'Zierikzee', '2987', 'Finland'),
-		A7(author$project$People$Person, 'Germane', '1-562-663-7530', 'Per Associates', 'P.O. Box 929 4035 Dolor Rd.', 'Tula', '2415', 'Djibouti'),
-		A7(author$project$People$Person, 'Thor', '1-657-155-7481', 'Enim Etiam Gravida Inc.', 'Ap #706-752 Dictum. Road', 'Ostrowiec Świętokrzyski', '258868', 'Nigeria'),
-		A7(author$project$People$Person, 'Kane', '1-820-440-0811', 'Semper Rutrum Associates', '6435 Praesent Street', 'Sibret', '63983', 'Iran'),
-		A7(author$project$People$Person, 'Kim', '1-244-115-8884', 'Lorem Fringilla Ornare Corp.', 'P.O. Box 150 9911 Maecenas Road', 'Raymond', '21609', 'Turkish Islands'),
-		A7(author$project$People$Person, 'Colt', '1-420-614-0847', 'Nisl Nulla Eu Industries', 'Ap #966-1415 Magna Av.', 'Esneux', '09756', 'Togo'),
-		A7(author$project$People$Person, 'Haley', '1-506-668-5036', 'Tempus Non Foundation', 'P.O. Box 119 5155 Quis St.', 'Melsele', '04706', 'Equatorial Guinea'),
-		A7(author$project$People$Person, 'Ralph', '1-254-537-6541', 'Erat LLP', '305-8188 Quam. St.', 'Chiguayante', '5289', 'Mauritius'),
-		A7(author$project$People$Person, 'Hoyt', '1-811-651-9830', 'Nam Incorporated', 'P.O. Box 834 6620 Amet St.', 'Quillón', '61814', 'Mauritania'),
-		A7(author$project$People$Person, 'Larissa', '1-115-796-4600', 'Odio Tristique Pharetra Industries', 'P.O. Box 391 9405 Auctor Avenue', 'Swan', '41351', 'South Africa'),
-		A7(author$project$People$Person, 'Warren', '1-394-440-0903', 'Nec Tempus Scelerisque Company', '8384 Ridiculus Street', 'Liverpool', '799203', 'Tokelau'),
-		A7(author$project$People$Person, 'Flynn', '1-437-904-7442', 'Nunc Id Ltd', '814-3994 Neque Ave', 'Amsterdam', '79610', 'El Salvador'),
-		A7(author$project$People$Person, 'Merrill', '1-991-142-9657', 'Quisque Inc.', '155-7795 Lacinia Ave', 'Greater Sudbury', 'K2Y3X9', 'Sudan')
-	]);
 var mdgriffith$elm_ui$Internal$Model$AlignX = function (a) {
 	return {$: 'AlignX', a: a};
 };
 var mdgriffith$elm_ui$Internal$Model$CenterX = {$: 'CenterX'};
 var mdgriffith$elm_ui$Element$centerX = mdgriffith$elm_ui$Internal$Model$AlignX(mdgriffith$elm_ui$Internal$Model$CenterX);
-var mdgriffith$elm_ui$Internal$Model$AlignY = function (a) {
-	return {$: 'AlignY', a: a};
-};
-var mdgriffith$elm_ui$Internal$Model$CenterY = {$: 'CenterY'};
-var mdgriffith$elm_ui$Element$centerY = mdgriffith$elm_ui$Internal$Model$AlignY(mdgriffith$elm_ui$Internal$Model$CenterY);
-var mdgriffith$elm_ui$Internal$Model$AsColumn = {$: 'AsColumn'};
-var mdgriffith$elm_ui$Internal$Model$asColumn = mdgriffith$elm_ui$Internal$Model$AsColumn;
-var mdgriffith$elm_ui$Internal$Model$Attr = function (a) {
-	return {$: 'Attr', a: a};
-};
-var mdgriffith$elm_ui$Internal$Model$htmlClass = function (cls) {
-	return mdgriffith$elm_ui$Internal$Model$Attr(
-		elm$html$Html$Attributes$class(cls));
-};
-var mdgriffith$elm_ui$Element$column = F2(
-	function (attrs, children) {
-		return A4(
-			mdgriffith$elm_ui$Internal$Model$element,
-			mdgriffith$elm_ui$Internal$Model$asColumn,
-			mdgriffith$elm_ui$Internal$Model$div,
-			A2(
-				elm$core$List$cons,
-				mdgriffith$elm_ui$Internal$Model$htmlClass(mdgriffith$elm_ui$Internal$Style$classes.contentTop + (' ' + mdgriffith$elm_ui$Internal$Style$classes.contentLeft)),
-				A2(
-					elm$core$List$cons,
-					mdgriffith$elm_ui$Element$height(mdgriffith$elm_ui$Element$shrink),
-					A2(
-						elm$core$List$cons,
-						mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$shrink),
-						attrs))),
-			mdgriffith$elm_ui$Internal$Model$Unkeyed(children));
-	});
 var mdgriffith$elm_ui$Element$InternalIndexedColumn = function (a) {
 	return {$: 'InternalIndexedColumn', a: a};
 };
@@ -10282,6 +10250,55 @@ var mdgriffith$elm_ui$Element$indexedTable = F2(
 				columns: A2(elm$core$List$map, mdgriffith$elm_ui$Element$InternalIndexedColumn, config.columns),
 				data: config.data
 			});
+	});
+var author$project$Table$view = F2(
+	function (data, columns) {
+		return A2(
+			mdgriffith$elm_ui$Element$indexedTable,
+			_List_fromArray(
+				[
+					mdgriffith$elm_ui$Element$centerX,
+					mdgriffith$elm_ui$Element$Border$color(
+					A3(mdgriffith$elm_ui$Element$rgb255, 55, 55, 55)),
+					mdgriffith$elm_ui$Element$Border$widthEach(
+					_Utils_update(
+						author$project$Common$edges,
+						{bottom: 1})),
+					mdgriffith$elm_ui$Element$Border$solid
+				]),
+			{columns: columns, data: data});
+	});
+var mdgriffith$elm_ui$Internal$Model$AlignY = function (a) {
+	return {$: 'AlignY', a: a};
+};
+var mdgriffith$elm_ui$Internal$Model$CenterY = {$: 'CenterY'};
+var mdgriffith$elm_ui$Element$centerY = mdgriffith$elm_ui$Internal$Model$AlignY(mdgriffith$elm_ui$Internal$Model$CenterY);
+var mdgriffith$elm_ui$Internal$Model$AsColumn = {$: 'AsColumn'};
+var mdgriffith$elm_ui$Internal$Model$asColumn = mdgriffith$elm_ui$Internal$Model$AsColumn;
+var mdgriffith$elm_ui$Internal$Model$Attr = function (a) {
+	return {$: 'Attr', a: a};
+};
+var mdgriffith$elm_ui$Internal$Model$htmlClass = function (cls) {
+	return mdgriffith$elm_ui$Internal$Model$Attr(
+		elm$html$Html$Attributes$class(cls));
+};
+var mdgriffith$elm_ui$Element$column = F2(
+	function (attrs, children) {
+		return A4(
+			mdgriffith$elm_ui$Internal$Model$element,
+			mdgriffith$elm_ui$Internal$Model$asColumn,
+			mdgriffith$elm_ui$Internal$Model$div,
+			A2(
+				elm$core$List$cons,
+				mdgriffith$elm_ui$Internal$Model$htmlClass(mdgriffith$elm_ui$Internal$Style$classes.contentTop + (' ' + mdgriffith$elm_ui$Internal$Style$classes.contentLeft)),
+				A2(
+					elm$core$List$cons,
+					mdgriffith$elm_ui$Element$height(mdgriffith$elm_ui$Element$shrink),
+					A2(
+						elm$core$List$cons,
+						mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$shrink),
+						attrs))),
+			mdgriffith$elm_ui$Internal$Model$Unkeyed(children));
 	});
 var mdgriffith$elm_ui$Internal$Model$OnlyDynamic = F2(
 	function (a, b) {
@@ -11341,8 +11358,8 @@ var author$project$Main$view = function (model) {
 									_List_fromArray(
 										[
 											mdgriffith$elm_ui$Element$centerY,
-											mdgriffith$elm_ui$Element$Font$size(18),
-											A2(mdgriffith$elm_ui$Element$paddingXY, 8, 2)
+											A2(mdgriffith$elm_ui$Element$paddingXY, 8, 2),
+											mdgriffith$elm_ui$Element$Font$size(18)
 										]),
 									mdgriffith$elm_ui$Element$text('Search: ')),
 								onChange: author$project$Main$UpdateSearch,
@@ -11351,54 +11368,41 @@ var author$project$Main$view = function (model) {
 							})
 						])),
 					A2(
-					mdgriffith$elm_ui$Element$indexedTable,
+					author$project$Table$view,
+					A2(author$project$Main$filter, model.searchText, author$project$People$people),
 					_List_fromArray(
 						[
-							mdgriffith$elm_ui$Element$centerX,
-							mdgriffith$elm_ui$Element$Border$color(
-							A3(mdgriffith$elm_ui$Element$rgb255, 55, 55, 55)),
-							mdgriffith$elm_ui$Element$Border$widthEach(
-							_Utils_update(
-								author$project$Main$edges,
-								{bottom: 1})),
-							mdgriffith$elm_ui$Element$Border$solid
-						]),
-					{
-						columns: _List_fromArray(
-							[
-								A2(
-								author$project$Main$stringColumn,
-								'Name',
-								function ($) {
-									return $.name;
-								}),
-								A2(
-								author$project$Main$stringColumn,
-								'Phone',
-								function ($) {
-									return $.phone;
-								}),
-								A2(
-								author$project$Main$stringColumn,
-								'Company',
-								function ($) {
-									return $.company;
-								}),
-								A2(
-								author$project$Main$stringColumn,
-								'Address',
-								function ($) {
-									return $.address;
-								}),
-								A2(
-								author$project$Main$stringColumn,
-								'City',
-								function ($) {
-									return $.city;
-								})
-							]),
-						data: A2(author$project$Main$filter, model.searchText, author$project$People$people)
-					})
+							A2(
+							author$project$Table$stringColumn,
+							'Name',
+							function ($) {
+								return $.name;
+							}),
+							A2(
+							author$project$Table$stringColumn,
+							'Phone',
+							function ($) {
+								return $.phone;
+							}),
+							A2(
+							author$project$Table$stringColumn,
+							'Company',
+							function ($) {
+								return $.company;
+							}),
+							A2(
+							author$project$Table$stringColumn,
+							'Address',
+							function ($) {
+								return $.address;
+							}),
+							A2(
+							author$project$Table$stringColumn,
+							'City',
+							function ($) {
+								return $.city;
+							})
+						]))
 				])));
 };
 var elm$core$Platform$Cmd$batch = _Platform_batch;

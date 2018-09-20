@@ -1,4 +1,7 @@
-module People exposing (Person, formatString, people, personToString, personToStringFormatted)
+module People exposing (Person, people, personToStringFormatted)
+
+import Common
+import Table
 
 
 personToString : Person -> String
@@ -12,18 +15,11 @@ personToString p =
         |> List.foldr (\t y -> t ++ "||" ++ y) ""
 
 
-formatString : String -> String
-formatString str =
-    str
-        |> String.toLower
-        |> String.filter Char.isAlpha
-
-
 personToStringFormatted : Person -> String
 personToStringFormatted person =
     person
         |> personToString
-        |> formatString
+        |> Common.formatString
 
 
 type alias Person =
