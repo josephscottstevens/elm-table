@@ -71,8 +71,8 @@ people =
     , Person "Larissa" "1-115-796-4600" "Odio Tristique Pharetra Industries" "P.O. Box 391 9405 Auctor Avenue" "Swan" "41351" "South Africa"
     , Person "Warren" "1-394-440-0903" "Nec Tempus Scelerisque Company" "8384 Ridiculus Street" "Liverpool" "799203" "Tokelau"
     , Person "Flynn" "1-437-904-7442" "Nunc Id Ltd" "814-3994 Neque Ave" "Amsterdam" "79610" "El Salvador"
+    , Person "Merrill" "1-991-142-9657" "Quisque Inc." "155-7795 Lacinia Ave" "Greater Sudbury" "K2Y3X9" "Sudan"
 
-    -- , Person "Merrill" "1-991-142-9657" "Quisque Inc." "155-7795 Lacinia Ave" "Greater Sudbury "K2Y  "3X9" "Sudan"
     -- , Person "April" "1-694-311-8548" "Facilisis Limited" "Ap #319-9403 Ante Road" "Meerhout "35172" "South "Africa"
     -- , Person "Lucius" "1-368-606-8564" "Et Institute" "Ap #141-9332 Sit Road" "Saint "Andr�" "03405" "Tunisia"
     -- , Person "Marvin" "1-392-397-5931" "Aliquet Nec Limited" "Ap #384-585 Amet Ave" "Notre-Dame-du "Nord" "6068" "Senegal"

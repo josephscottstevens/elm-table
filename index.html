@@ -4347,6 +4347,7 @@ var author$project$Main$update = F2(
 var author$project$Main$UpdateSearch = function (a) {
 	return {$: 'UpdateSearch', a: a};
 };
+var author$project$Main$edges = {bottom: 0, left: 0, right: 0, top: 0};
 var elm$core$Basics$apR = F2(
 	function (x, f) {
 		return f(x);
@@ -4577,7 +4578,6 @@ var author$project$Main$filter = F2(
 			},
 			people);
 	});
-var author$project$Main$edges = {bottom: 0, left: 0, right: 0, top: 0};
 var elm$core$Basics$eq = _Utils_equal;
 var elm$core$Basics$modBy = _Basics_modBy;
 var elm$core$String$fromInt = _String_fromNumber;
@@ -9919,10 +9919,26 @@ var mdgriffith$elm_ui$Internal$Model$Text = function (a) {
 var mdgriffith$elm_ui$Element$text = function (content) {
 	return mdgriffith$elm_ui$Internal$Model$Text(content);
 };
+var mdgriffith$elm_ui$Internal$Flag$fontWeight = mdgriffith$elm_ui$Internal$Flag$flag(13);
+var mdgriffith$elm_ui$Element$Font$bold = A2(mdgriffith$elm_ui$Internal$Model$Class, mdgriffith$elm_ui$Internal$Flag$fontWeight, mdgriffith$elm_ui$Internal$Style$classes.bold);
 var author$project$Main$stringColumn = F2(
 	function (headerString, data) {
 		return {
-			header: mdgriffith$elm_ui$Element$text(headerString),
+			header: A2(
+				mdgriffith$elm_ui$Element$el,
+				_List_fromArray(
+					[
+						mdgriffith$elm_ui$Element$Border$color(
+						A3(mdgriffith$elm_ui$Element$rgb255, 55, 55, 55)),
+						mdgriffith$elm_ui$Element$Border$widthEach(
+						_Utils_update(
+							author$project$Main$edges,
+							{bottom: 1})),
+						mdgriffith$elm_ui$Element$Border$solid,
+						A2(mdgriffith$elm_ui$Element$paddingXY, 10, 8),
+						mdgriffith$elm_ui$Element$Font$bold
+					]),
+				mdgriffith$elm_ui$Element$text(headerString)),
 			view: F2(
 				function (idx, t) {
 					return A2(
@@ -9971,7 +9987,8 @@ var author$project$People$people = _List_fromArray(
 		A7(author$project$People$Person, 'Hoyt', '1-811-651-9830', 'Nam Incorporated', 'P.O. Box 834 6620 Amet St.', 'Quillón', '61814', 'Mauritania'),
 		A7(author$project$People$Person, 'Larissa', '1-115-796-4600', 'Odio Tristique Pharetra Industries', 'P.O. Box 391 9405 Auctor Avenue', 'Swan', '41351', 'South Africa'),
 		A7(author$project$People$Person, 'Warren', '1-394-440-0903', 'Nec Tempus Scelerisque Company', '8384 Ridiculus Street', 'Liverpool', '799203', 'Tokelau'),
-		A7(author$project$People$Person, 'Flynn', '1-437-904-7442', 'Nunc Id Ltd', '814-3994 Neque Ave', 'Amsterdam', '79610', 'El Salvador')
+		A7(author$project$People$Person, 'Flynn', '1-437-904-7442', 'Nunc Id Ltd', '814-3994 Neque Ave', 'Amsterdam', '79610', 'El Salvador'),
+		A7(author$project$People$Person, 'Merrill', '1-991-142-9657', 'Quisque Inc.', '155-7795 Lacinia Ave', 'Greater Sudbury', 'K2Y3X9', 'Sudan')
 	]);
 var mdgriffith$elm_ui$Internal$Model$AlignX = function (a) {
 	return {$: 'AlignX', a: a};
@@ -11314,12 +11331,19 @@ var author$project$Main$view = function (model) {
 						[
 							A2(
 							mdgriffith$elm_ui$Element$Input$text,
-							_List_Nil,
+							_List_fromArray(
+								[
+									mdgriffith$elm_ui$Element$Font$size(12)
+								]),
 							{
 								label: A2(
 									mdgriffith$elm_ui$Element$Input$labelLeft,
 									_List_fromArray(
-										[mdgriffith$elm_ui$Element$centerY]),
+										[
+											mdgriffith$elm_ui$Element$centerY,
+											mdgriffith$elm_ui$Element$Font$size(18),
+											A2(mdgriffith$elm_ui$Element$paddingXY, 8, 2)
+										]),
 									mdgriffith$elm_ui$Element$text('Search: ')),
 								onChange: author$project$Main$UpdateSearch,
 								placeholder: elm$core$Maybe$Nothing,
@@ -11329,7 +11353,16 @@ var author$project$Main$view = function (model) {
 					A2(
 					mdgriffith$elm_ui$Element$indexedTable,
 					_List_fromArray(
-						[mdgriffith$elm_ui$Element$centerX]),
+						[
+							mdgriffith$elm_ui$Element$centerX,
+							mdgriffith$elm_ui$Element$Border$color(
+							A3(mdgriffith$elm_ui$Element$rgb255, 55, 55, 55)),
+							mdgriffith$elm_ui$Element$Border$widthEach(
+							_Utils_update(
+								author$project$Main$edges,
+								{bottom: 1})),
+							mdgriffith$elm_ui$Element$Border$solid
+						]),
 					{
 						columns: _List_fromArray(
 							[

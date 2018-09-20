@@ -45,15 +45,24 @@ view model =
     <|
         column [ width fill, padding 40 ]
             [ row [ centerY ]
-                [ Input.text []
+                [ Input.text [ Font.size 12 ]
                     { onChange = UpdateSearch
                     , text = model.searchText
                     , placeholder = Nothing
-                    , label = Input.labelLeft [ centerY ] (text "Search: ")
+                    , label =
+                        Input.labelLeft
+                            [ centerY
+                            , Font.size 18
+                            , paddingXY 8 2
+                            ]
+                            (text "Search: ")
                     }
                 ]
             , Element.indexedTable
                 [ Element.centerX
+                , Border.color (rgb255 55 55 55)
+                , Border.widthEach { edges | bottom = 1 }
+                , Border.solid
                 ]
                 { data = filter model.searchText people
                 , columns =
@@ -99,7 +108,15 @@ columnStyle idx =
 
 stringColumn : String -> (record -> String) -> IndexedColumn record msg
 stringColumn headerString data =
-    { header = Element.text headerString
+    { header =
+        el
+            [ Border.color (rgb255 55 55 55)
+            , Border.widthEach { edges | bottom = 1 }
+            , Border.solid
+            , paddingXY 10 8
+            , Font.bold
+            ]
+            (Element.text headerString)
     , width = fill
     , view = \idx t -> el (columnStyle idx) (Element.text (data t))
     }
