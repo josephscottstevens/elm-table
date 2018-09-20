@@ -8,7 +8,40 @@ import Element.Font as Font
 
 
 
+-- Data Types
+
+
+blockSize : Int
+blockSize =
+    15
+
+
+init : String -> RowsPerPage -> State
+init sortedColumnheader displayLength =
+    { pageIndex = 0
+    , rowsPerPage = displayLength
+    , sortField = sortedColumnheader
+    , sortAscending = True
+    }
+
+
+type RowsPerPage
+    = Exactly Int
+    | All
+
+
+type alias State =
+    { pageIndex : Int
+    , rowsPerPage : RowsPerPage
+    , sortField : String
+    , sortAscending : Bool
+    }
+
+
+
 -- https://www.datatables.net/media/images/sort_asc.png
+-- https://www.datatables.net/media/images/sort_both.png
+-- https://www.datatables.net/media/images/sort_desc.png
 
 
 stringColumn : String -> (record -> String) -> Element.IndexedColumn record msg
