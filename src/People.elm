@@ -1,4 +1,29 @@
-module People exposing (Person, people)
+module People exposing (Person, formatString, people, personToString, personToStringFormatted)
+
+
+personToString : Person -> String
+personToString p =
+    [ p.name
+    , p.phone
+    , p.company
+    , p.address
+    , p.city
+    ]
+        |> List.foldr (\t y -> t ++ "||" ++ y) ""
+
+
+formatString : String -> String
+formatString str =
+    str
+        |> String.toLower
+        |> String.filter Char.isAlpha
+
+
+personToStringFormatted : Person -> String
+personToStringFormatted person =
+    person
+        |> personToString
+        |> formatString
 
 
 type alias Person =
@@ -34,20 +59,19 @@ people =
     , Person "Cassidy" "1-726-787-7788" "Magna Praesent Interdum Ltd" "970-1817 Elit Rd." "Sibret" "JJ24TH" "Cape Verde"
     , Person "Cally" "1-908-107-5453" "Non Luctus Sit Incorporated" "890 Dui. St." "Jasper" "60416" "Comoros"
     , Person "Hop" "1-167-169-1932" "Sit Institute" "P.O. Box 352 7837 Mus. Rd." "Treguaco" "25036" "Kenya"
+    , Person "Jack" "1-121-183-8448" "Mollis Ltd" "Ap #713-7052 Nec Street" "Zierikzee" "2987" "Finland"
+    , Person "Germane" "1-562-663-7530" "Per Associates" "P.O. Box 929 4035 Dolor Rd." "Tula" "2415" "Djibouti"
+    , Person "Thor" "1-657-155-7481" "Enim Etiam Gravida Inc." "Ap #706-752 Dictum. Road" "Ostrowiec Świętokrzyski" "258868" "Nigeria"
+    , Person "Kane" "1-820-440-0811" "Semper Rutrum Associates" "6435 Praesent Street" "Sibret" "63983" "Iran"
+    , Person "Kim" "1-244-115-8884" "Lorem Fringilla Ornare Corp." "P.O. Box 150 9911 Maecenas Road" "Raymond" "21609" "Turkish Islands"
+    , Person "Colt" "1-420-614-0847" "Nisl Nulla Eu Industries" "Ap #966-1415 Magna Av." "Esneux" "09756" "Togo"
+    , Person "Haley" "1-506-668-5036" "Tempus Non Foundation" "P.O. Box 119 5155 Quis St." "Melsele" "04706" "Equatorial Guinea"
+    , Person "Ralph" "1-254-537-6541" "Erat LLP" "305-8188 Quam. St." "Chiguayante" "5289" "Mauritius"
+    , Person "Hoyt" "1-811-651-9830" "Nam Incorporated" "P.O. Box 834 6620 Amet St." "Quillón" "61814" "Mauritania"
+    , Person "Larissa" "1-115-796-4600" "Odio Tristique Pharetra Industries" "P.O. Box 391 9405 Auctor Avenue" "Swan" "41351" "South Africa"
+    , Person "Warren" "1-394-440-0903" "Nec Tempus Scelerisque Company" "8384 Ridiculus Street" "Liverpool" "799203" "Tokelau"
+    , Person "Flynn" "1-437-904-7442" "Nunc Id Ltd" "814-3994 Neque Ave" "Amsterdam" "79610" "El Salvador"
 
-    -- , Person "Jack" "1-121-183-8448" "Mollis Ltd" "Ap #713-7052 Nec Street "Zierikzee" "2987" "Finland"
-    -- , Person "Medge" "1-208-643-9475" "Neque Incorporated" "P.O. Box 952 1057 Vulputate St." "Wolfville" "01-226 "Cocos  ("Keeling) "Islands"
-    -- , Person "Germane" "1-562-663-7530" "Per Associates" "P.O. Box 929 4035 Dolor Rd. "Tula" "2415" "Djibouti"
-    -- , Person "Thor" "1-657-155-7481" "Enim Etiam Gravida Inc." "Ap #706-752 Dictum. Road" "Ostrowiec "Świętokrzyski" "258868" "Nigeria"
-    -- , Person "Kane" "1-820-440-0811" "Semper Rutrum Associates" "6435 Praesent Street "Sibret" "63983" "Iran"
-    -- , Person "Kim" "1-244-115-8884" "Lorem Fringilla Ornare Corp." "P.O. Box 150 9911 Maecenas Road" "Raymond" "21609" "Turks "and  "Caicos "Islands"
-    -- , Person "Colt" "1-420-614-0847" "Nisl Nulla Eu Industries" "Ap #966-1415 Magna Av. "Esneux" "09756" "Togo"
-    -- , Person "Haley" "1-506-668-5036" "Tempus Non Foundation" "P.O. Box 119 5155 Quis St." "Melsele "04706" "Equatorial "Guinea"
-    -- , Person "Ralph" "1-254-537-6541" "Erat LLP" "305-8188 Quam. St. "Chiguayante" "5289" "Mauritius"
-    -- , Person "Hoyt" "1-811-651-9830" "Nam Incorporated" "P.O. Box 834 6620 Amet St. "Quillón" "61814" "Mauritania"
-    -- , Person "Larissa" "1-115-796-4600" "Odio Tristique Pharetra Industries" "P.O. Box 391 9405 Auctor Avenue" "Swan "41351" "South "Africa"
-    -- , Person "Warren" "1-394-440-0903" "Nec Tempus Scelerisque Company" "8384 Ridiculus Street "Liverpool" "799203" "Tokelau"
-    -- , Person "Flynn" "1-437-904-7442" "Nunc Id Ltd" "814-3994 Neque Ave" "Leke "79610" "El "Salvador"
     -- , Person "Merrill" "1-991-142-9657" "Quisque Inc." "155-7795 Lacinia Ave" "Greater Sudbury "K2Y  "3X9" "Sudan"
     -- , Person "April" "1-694-311-8548" "Facilisis Limited" "Ap #319-9403 Ante Road" "Meerhout "35172" "South "Africa"
     -- , Person "Lucius" "1-368-606-8564" "Et Institute" "Ap #141-9332 Sit Road" "Saint "Andr�" "03405" "Tunisia"

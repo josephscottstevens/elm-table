@@ -1,5 +1,6 @@
 module Main exposing (main)
 
+import Browser
 import Element exposing (..)
 import Element.Background as Background
 import Element.Font as Font
@@ -8,7 +9,28 @@ import Element.Lazy
 import People exposing (..)
 
 
-main =
+type alias Model =
+    { searchText : String
+    }
+
+
+emptyModel : Model
+emptyModel =
+    { searchText = "" }
+
+
+type Msg
+    = UpdateSearch String
+
+
+update : Msg -> Model -> Model
+update msg model =
+    case msg of
+        UpdateSearch str ->
+            { model | searchText = str }
+
+
+view model =
     Element.layout
         [ Font.size 18
         , Font.family
@@ -21,12 +43,12 @@ main =
         ]
     <|
         column [ width fill ]
-            [ row []
+            [ row [ centerY ]
                 [ Input.text []
                     { onChange = UpdateSearch
                     , text = model.searchText
-                    , placeHolder = Just (text "search")
-                    , label = Input.labelLeft [] (text "Search: ")
+                    , placeholder = Nothing
+                    , label = Input.labelLeft [ centerY ] (text "Search: ")
                     }
                 ]
             , Element.table
@@ -34,26 +56,31 @@ main =
                 , Element.spacing 5
                 , Element.padding 10
                 ]
-                { data = people
+                { data = filter model.searchText people
                 , columns =
-                    [ { header = Element.text "Name"
-                      , width = px 200
-                      , view =
-                            \person ->
-                                Element.text person.name
-                      }
-                    , { header = Element.text "Phone"
-                      , width = fill
-                      , view =
-                            \person ->
-                                Element.text person.phone
-                      }
-                    , { header = Element.text "Company"
-                      , width = fill
-                      , view =
-                            \person ->
-                                Element.text person.company
-                      }
+                    [ stringColumn "Name" .name
+                    , stringColumn "Phone" .phone
+                    , stringColumn "Company" .company
+                    , stringColumn "Address" .address
+                    , stringColumn "City" .city
                     ]
                 }
             ]
+
+
+main =
+    Browser.sandbox { init = emptyModel, update = update, view = view }
+
+
+stringColumn : String -> (record -> String) -> Column record msg
+stringColumn headerString data =
+    { header = Element.text headerString
+    , width = fill
+    , view = data >> (\t -> Element.text t)
+    }
+
+
+filter : String -> List Person -> List Person
+filter filterString people =
+    people
+        |> List.filter (\p -> String.contains (formatString filterString) (personToStringFormatted p))
