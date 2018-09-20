@@ -3,7 +3,7 @@ module Main exposing (main)
 import Element exposing (..)
 import Element.Background as Background
 import Element.Font as Font
-import Element.Input
+import Element.Input as Input
 import Element.Lazy
 import People exposing (..)
 
@@ -20,10 +20,17 @@ main =
             ]
         ]
     <|
-        row [ width fill ]
-            [ Element.table
+        column [ width fill ]
+            [ row []
+                [ Input.text []
+                    { onChange = UpdateSearch
+                    , text = model.searchText
+                    , placeHolder = Just (text "search")
+                    , label = Input.labelLeft [] (text "Search: ")
+                    }
+                ]
+            , Element.table
                 [ Element.centerX
-                , Element.centerY
                 , Element.spacing 5
                 , Element.padding 10
                 ]

@@ -789,6 +789,115 @@ var _List_sortWith = F2(function(f, xs)
 
 
 
+// MATH
+
+var _Basics_add = F2(function(a, b) { return a + b; });
+var _Basics_sub = F2(function(a, b) { return a - b; });
+var _Basics_mul = F2(function(a, b) { return a * b; });
+var _Basics_fdiv = F2(function(a, b) { return a / b; });
+var _Basics_idiv = F2(function(a, b) { return (a / b) | 0; });
+var _Basics_pow = F2(Math.pow);
+
+var _Basics_remainderBy = F2(function(b, a) { return a % b; });
+
+// https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/divmodnote-letter.pdf
+var _Basics_modBy = F2(function(modulus, x)
+{
+	var answer = x % modulus;
+	return modulus === 0
+		? _Debug_crash(11)
+		:
+	((answer > 0 && modulus < 0) || (answer < 0 && modulus > 0))
+		? answer + modulus
+		: answer;
+});
+
+
+// TRIGONOMETRY
+
+var _Basics_pi = Math.PI;
+var _Basics_e = Math.E;
+var _Basics_cos = Math.cos;
+var _Basics_sin = Math.sin;
+var _Basics_tan = Math.tan;
+var _Basics_acos = Math.acos;
+var _Basics_asin = Math.asin;
+var _Basics_atan = Math.atan;
+var _Basics_atan2 = F2(Math.atan2);
+
+
+// MORE MATH
+
+function _Basics_toFloat(x) { return x; }
+function _Basics_truncate(n) { return n | 0; }
+function _Basics_isInfinite(n) { return n === Infinity || n === -Infinity; }
+
+var _Basics_ceiling = Math.ceil;
+var _Basics_floor = Math.floor;
+var _Basics_round = Math.round;
+var _Basics_sqrt = Math.sqrt;
+var _Basics_log = Math.log;
+var _Basics_isNaN = isNaN;
+
+
+// BOOLEANS
+
+function _Basics_not(bool) { return !bool; }
+var _Basics_and = F2(function(a, b) { return a && b; });
+var _Basics_or  = F2(function(a, b) { return a || b; });
+var _Basics_xor = F2(function(a, b) { return a !== b; });
+
+
+
+function _Char_toCode(char)
+{
+	var code = char.charCodeAt(0);
+	if (0xD800 <= code && code <= 0xDBFF)
+	{
+		return (code - 0xD800) * 0x400 + char.charCodeAt(1) - 0xDC00 + 0x10000
+	}
+	return code;
+}
+
+function _Char_fromCode(code)
+{
+	return _Utils_chr(
+		(code < 0 || 0x10FFFF < code)
+			? '\uFFFD'
+			:
+		(code <= 0xFFFF)
+			? String.fromCharCode(code)
+			:
+		(code -= 0x10000,
+			String.fromCharCode(Math.floor(code / 0x400) + 0xD800)
+			+
+			String.fromCharCode(code % 0x400 + 0xDC00)
+		)
+	);
+}
+
+function _Char_toUpper(char)
+{
+	return _Utils_chr(char.toUpperCase());
+}
+
+function _Char_toLower(char)
+{
+	return _Utils_chr(char.toLowerCase());
+}
+
+function _Char_toLocaleUpper(char)
+{
+	return _Utils_chr(char.toLocaleUpperCase());
+}
+
+function _Char_toLocaleLower(char)
+{
+	return _Utils_chr(char.toLocaleLowerCase());
+}
+
+
+
 var _String_cons = F2(function(chr, str)
 {
 	return chr + str;
@@ -1098,115 +1207,6 @@ function _String_fromList(chars)
 	return _List_toArray(chars).join('');
 }
 
-
-
-
-// MATH
-
-var _Basics_add = F2(function(a, b) { return a + b; });
-var _Basics_sub = F2(function(a, b) { return a - b; });
-var _Basics_mul = F2(function(a, b) { return a * b; });
-var _Basics_fdiv = F2(function(a, b) { return a / b; });
-var _Basics_idiv = F2(function(a, b) { return (a / b) | 0; });
-var _Basics_pow = F2(Math.pow);
-
-var _Basics_remainderBy = F2(function(b, a) { return a % b; });
-
-// https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/divmodnote-letter.pdf
-var _Basics_modBy = F2(function(modulus, x)
-{
-	var answer = x % modulus;
-	return modulus === 0
-		? _Debug_crash(11)
-		:
-	((answer > 0 && modulus < 0) || (answer < 0 && modulus > 0))
-		? answer + modulus
-		: answer;
-});
-
-
-// TRIGONOMETRY
-
-var _Basics_pi = Math.PI;
-var _Basics_e = Math.E;
-var _Basics_cos = Math.cos;
-var _Basics_sin = Math.sin;
-var _Basics_tan = Math.tan;
-var _Basics_acos = Math.acos;
-var _Basics_asin = Math.asin;
-var _Basics_atan = Math.atan;
-var _Basics_atan2 = F2(Math.atan2);
-
-
-// MORE MATH
-
-function _Basics_toFloat(x) { return x; }
-function _Basics_truncate(n) { return n | 0; }
-function _Basics_isInfinite(n) { return n === Infinity || n === -Infinity; }
-
-var _Basics_ceiling = Math.ceil;
-var _Basics_floor = Math.floor;
-var _Basics_round = Math.round;
-var _Basics_sqrt = Math.sqrt;
-var _Basics_log = Math.log;
-var _Basics_isNaN = isNaN;
-
-
-// BOOLEANS
-
-function _Basics_not(bool) { return !bool; }
-var _Basics_and = F2(function(a, b) { return a && b; });
-var _Basics_or  = F2(function(a, b) { return a || b; });
-var _Basics_xor = F2(function(a, b) { return a !== b; });
-
-
-
-function _Char_toCode(char)
-{
-	var code = char.charCodeAt(0);
-	if (0xD800 <= code && code <= 0xDBFF)
-	{
-		return (code - 0xD800) * 0x400 + char.charCodeAt(1) - 0xDC00 + 0x10000
-	}
-	return code;
-}
-
-function _Char_fromCode(code)
-{
-	return _Utils_chr(
-		(code < 0 || 0x10FFFF < code)
-			? '\uFFFD'
-			:
-		(code <= 0xFFFF)
-			? String.fromCharCode(code)
-			:
-		(code -= 0x10000,
-			String.fromCharCode(Math.floor(code / 0x400) + 0xD800)
-			+
-			String.fromCharCode(code % 0x400 + 0xDC00)
-		)
-	);
-}
-
-function _Char_toUpper(char)
-{
-	return _Utils_chr(char.toUpperCase());
-}
-
-function _Char_toLower(char)
-{
-	return _Utils_chr(char.toLowerCase());
-}
-
-function _Char_toLocaleUpper(char)
-{
-	return _Utils_chr(char.toLocaleUpperCase());
-}
-
-function _Char_toLocaleLower(char)
-{
-	return _Utils_chr(char.toLocaleLowerCase());
-}
 
 
 
@@ -3900,9 +3900,9 @@ var _Bitwise_shiftRightZfBy = F2(function(offset, a)
 {
 	return a >>> offset;
 });
-var author$project$Main$Person = F3(
-	function (firstName, lastName, age) {
-		return {age: age, firstName: firstName, lastName: lastName};
+var author$project$People$Person = F7(
+	function (name, phone, company, address, city, zip, country) {
+		return {address: address, city: city, company: company, country: country, name: name, phone: phone, zip: zip};
 	});
 var elm$core$Basics$EQ = {$: 'EQ'};
 var elm$core$Basics$LT = {$: 'LT'};
@@ -3984,20 +3984,33 @@ var elm$core$Set$toList = function (_n0) {
 	var dict = _n0.a;
 	return elm$core$Dict$keys(dict);
 };
-var author$project$Main$persons = _List_fromArray(
+var author$project$People$people = _List_fromArray(
 	[
-		A3(author$project$Main$Person, 'David', 'Bowie', 21),
-		A3(author$project$Main$Person, 'Florence', 'Welch', 16)
+		A7(author$project$People$Person, 'Tyler', '1-325-350-7643', 'Nec Incorporated', '345-1249 Leo Av.', 'Montone', '11819', 'Oman'),
+		A7(author$project$People$Person, 'Addison', '1-919-396-3444', 'Ac Inc.', '141-6364 Amet Road', 'Coinco', '564821', 'Heard Mcdonald Islands'),
+		A7(author$project$People$Person, 'Colin', '1-179-478-8436', 'Augue Sed Incorporated', '4450 Consequat Rd.', 'Piła', '17397', 'Kenya'),
+		A7(author$project$People$Person, 'Marsden', '1-121-280-7045', 'Nascetur Ridiculus Consulting', 'Ap #409-3018 Sed Road', 'Merzig', '2707', 'Iraq'),
+		A7(author$project$People$Person, 'Aubrey', '1-811-581-0929', 'Blandit Industries', '4827 Pellentesque Avenue', 'Randazzo', '35463', 'Equatorial Guinea'),
+		A7(author$project$People$Person, 'Kylee', '1-652-256-8057', 'Lacus Corp.', '9009 Laoreet Rd.', 'Sainte-Marie-Chevigny', 'P5G 9K5', 'Wallis Futuna'),
+		A7(author$project$People$Person, 'Avye', '1-613-847-4640', 'Sed Eu LLP', 'Ap #565-6166 Vel Ave', 'Juiz de Fora', '71003', 'Yemen'),
+		A7(author$project$People$Person, 'Wang', '1-716-808-1478', 'Curabitur Massa Vestibulum Ltd', 'Ap #608-3841 Per St.', 'Castello dell Acqua', '21200', 'Guinea'),
+		A7(author$project$People$Person, 'Karina', '1-334-358-2328', 'Libero Est Institute', 'P.O. Box 210 1669 Malesuada Road', 'Auburn', '5556', 'Mexico'),
+		A7(author$project$People$Person, 'Debra', '1-674-602-3053', 'Donec Egestas Industries', 'P.O. Box 489 6506 Vel Rd.', 'Inuvik', '475230', 'Turkmenistan'),
+		A7(author$project$People$Person, 'Josiah', '1-256-498-3739', 'Aliquam Corp.', '4182 Egestas Rd.', 'Longvilly', '396735', 'Isle of Man'),
+		A7(author$project$People$Person, 'Jasper', '1-827-845-5903', 'Semper Rutrum Fusce Ltd', '620-8800 Enim Ave', 'Campina Grande', '58981', 'Macedonia'),
+		A7(author$project$People$Person, 'Ferdinand', '1-867-979-4649', 'Enim PC', 'P.O. Box 790 9699 Erat. Av.', 'Frankfurt am Main', '51269', 'Suriname'),
+		A7(author$project$People$Person, 'Arsenio', '1-409-812-0418', 'Mauris Morbi Non PC', 'P.O. Box 931 4528 Pellentesque Street', 'Buggenhout', '10608', 'Niue'),
+		A7(author$project$People$Person, 'Colt', '1-608-592-3898', 'Elit Elit Fermentum Company', '5159 Bibendum. Av.', 'Rachecourt', '11891', 'Saint Kitts'),
+		A7(author$project$People$Person, 'Lars', '1-658-502-1947', 'Neque Morbi Inc.', 'Ap #314-4836 Et Avenue', 'Saumur', '482202', 'Honduras'),
+		A7(author$project$People$Person, 'Ignacia', '1-847-573-3631', 'Eros Corp.', 'Ap #984-3029 Dolor St.', 'Bossut-Gottechain', 'K8L8G5', 'French Polynesia'),
+		A7(author$project$People$Person, 'Cassidy', '1-726-787-7788', 'Magna Praesent Interdum Ltd', '970-1817 Elit Rd.', 'Sibret', 'JJ24TH', 'Cape Verde'),
+		A7(author$project$People$Person, 'Cally', '1-908-107-5453', 'Non Luctus Sit Incorporated', '890 Dui. St.', 'Jasper', '60416', 'Comoros'),
+		A7(author$project$People$Person, 'Hop', '1-167-169-1932', 'Sit Institute', 'P.O. Box 352 7837 Mus. Rd.', 'Treguaco', '25036', 'Kenya')
 	]);
 var elm$core$Basics$apL = F2(
 	function (f, x) {
 		return f(x);
 	});
-var elm$core$Maybe$Just = function (a) {
-	return {$: 'Just', a: a};
-};
-var elm$core$Maybe$Nothing = {$: 'Nothing'};
-var elm$core$String$fromInt = _String_fromNumber;
 var elm$core$Basics$identity = function (x) {
 	return x;
 };
@@ -4177,6 +4190,10 @@ var elm$core$Array$initialize = F2(
 			return A5(elm$core$Array$initializeHelp, fn, initialFromIndex, len, _List_Nil, tail);
 		}
 	});
+var elm$core$Maybe$Just = function (a) {
+	return {$: 'Just', a: a};
+};
+var elm$core$Maybe$Nothing = {$: 'Nothing'};
 var elm$core$Result$Err = function (a) {
 	return {$: 'Err', a: a};
 };
@@ -4264,6 +4281,7 @@ var elm$core$List$indexedMap = F2(
 			xs);
 	});
 var elm$core$String$all = _String_all;
+var elm$core$String$fromInt = _String_fromNumber;
 var elm$core$String$join = F2(
 	function (sep, chunks) {
 		return A2(
@@ -4407,44 +4425,21 @@ var mdgriffith$elm_ui$Internal$Model$AlignX = function (a) {
 };
 var mdgriffith$elm_ui$Internal$Model$CenterX = {$: 'CenterX'};
 var mdgriffith$elm_ui$Element$centerX = mdgriffith$elm_ui$Internal$Model$AlignX(mdgriffith$elm_ui$Internal$Model$CenterX);
-var mdgriffith$elm_ui$Internal$Model$AlignY = function (a) {
-	return {$: 'AlignY', a: a};
+var mdgriffith$elm_ui$Internal$Model$Height = function (a) {
+	return {$: 'Height', a: a};
 };
-var mdgriffith$elm_ui$Internal$Model$CenterY = {$: 'CenterY'};
-var mdgriffith$elm_ui$Element$centerY = mdgriffith$elm_ui$Internal$Model$AlignY(mdgriffith$elm_ui$Internal$Model$CenterY);
-var mdgriffith$elm_ui$Internal$Model$Fill = function (a) {
-	return {$: 'Fill', a: a};
+var mdgriffith$elm_ui$Element$height = mdgriffith$elm_ui$Internal$Model$Height;
+var mdgriffith$elm_ui$Internal$Model$Content = {$: 'Content'};
+var mdgriffith$elm_ui$Element$shrink = mdgriffith$elm_ui$Internal$Model$Content;
+var mdgriffith$elm_ui$Internal$Model$Width = function (a) {
+	return {$: 'Width', a: a};
 };
-var mdgriffith$elm_ui$Element$fill = mdgriffith$elm_ui$Internal$Model$Fill(1);
-var elm$json$Json$Encode$string = _Json_wrap;
-var elm$html$Html$Attributes$stringProperty = F2(
-	function (key, string) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			elm$json$Json$Encode$string(string));
-	});
-var elm$html$Html$Attributes$class = elm$html$Html$Attributes$stringProperty('className');
-var mdgriffith$elm_ui$Internal$Model$Attr = function (a) {
-	return {$: 'Attr', a: a};
-};
-var mdgriffith$elm_ui$Internal$Model$htmlClass = function (cls) {
-	return mdgriffith$elm_ui$Internal$Model$Attr(
-		elm$html$Html$Attributes$class(cls));
-};
-var mdgriffith$elm_ui$Internal$Model$OnlyDynamic = F2(
-	function (a, b) {
-		return {$: 'OnlyDynamic', a: a, b: b};
-	});
-var mdgriffith$elm_ui$Internal$Model$StaticRootAndDynamic = F2(
-	function (a, b) {
-		return {$: 'StaticRootAndDynamic', a: a, b: b};
-	});
+var mdgriffith$elm_ui$Element$width = mdgriffith$elm_ui$Internal$Model$Width;
 var mdgriffith$elm_ui$Internal$Model$Unkeyed = function (a) {
 	return {$: 'Unkeyed', a: a};
 };
-var mdgriffith$elm_ui$Internal$Model$AsEl = {$: 'AsEl'};
-var mdgriffith$elm_ui$Internal$Model$asEl = mdgriffith$elm_ui$Internal$Model$AsEl;
+var mdgriffith$elm_ui$Internal$Model$AsColumn = {$: 'AsColumn'};
+var mdgriffith$elm_ui$Internal$Model$asColumn = mdgriffith$elm_ui$Internal$Model$AsColumn;
 var mdgriffith$elm_ui$Internal$Model$Generic = {$: 'Generic'};
 var mdgriffith$elm_ui$Internal$Model$div = mdgriffith$elm_ui$Internal$Model$Generic;
 var mdgriffith$elm_ui$Internal$Flag$Field = F2(
@@ -4562,6 +4557,8 @@ var mdgriffith$elm_ui$Internal$Model$Styled = function (a) {
 var mdgriffith$elm_ui$Internal$Model$Unstyled = function (a) {
 	return {$: 'Unstyled', a: a};
 };
+var mdgriffith$elm_ui$Internal$Model$AsEl = {$: 'AsEl'};
+var mdgriffith$elm_ui$Internal$Model$asEl = mdgriffith$elm_ui$Internal$Model$AsEl;
 var mdgriffith$elm_ui$Internal$Model$AsParagraph = {$: 'AsParagraph'};
 var mdgriffith$elm_ui$Internal$Model$asParagraph = mdgriffith$elm_ui$Internal$Model$AsParagraph;
 var elm$core$Basics$not = _Basics_not;
@@ -4569,6 +4566,15 @@ var elm$html$Html$div = _VirtualDom_node('div');
 var elm$html$Html$p = _VirtualDom_node('p');
 var elm$html$Html$s = _VirtualDom_node('s');
 var elm$html$Html$u = _VirtualDom_node('u');
+var elm$json$Json$Encode$string = _Json_wrap;
+var elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			elm$json$Json$Encode$string(string));
+	});
+var elm$html$Html$Attributes$class = elm$html$Html$Attributes$stringProperty('className');
 var elm$virtual_dom$VirtualDom$keyedNode = function (tag) {
 	return _VirtualDom_keyedNode(
 		_VirtualDom_noScript(tag));
@@ -9302,6 +9308,60 @@ var mdgriffith$elm_ui$Internal$Model$element = F4(
 				_List_Nil,
 				elm$core$List$reverse(attributes)));
 	});
+var mdgriffith$elm_ui$Internal$Model$Attr = function (a) {
+	return {$: 'Attr', a: a};
+};
+var mdgriffith$elm_ui$Internal$Model$htmlClass = function (cls) {
+	return mdgriffith$elm_ui$Internal$Model$Attr(
+		elm$html$Html$Attributes$class(cls));
+};
+var mdgriffith$elm_ui$Element$column = F2(
+	function (attrs, children) {
+		return A4(
+			mdgriffith$elm_ui$Internal$Model$element,
+			mdgriffith$elm_ui$Internal$Model$asColumn,
+			mdgriffith$elm_ui$Internal$Model$div,
+			A2(
+				elm$core$List$cons,
+				mdgriffith$elm_ui$Internal$Model$htmlClass(mdgriffith$elm_ui$Internal$Style$classes.contentTop + (' ' + mdgriffith$elm_ui$Internal$Style$classes.contentLeft)),
+				A2(
+					elm$core$List$cons,
+					mdgriffith$elm_ui$Element$height(mdgriffith$elm_ui$Element$shrink),
+					A2(
+						elm$core$List$cons,
+						mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$shrink),
+						attrs))),
+			mdgriffith$elm_ui$Internal$Model$Unkeyed(children));
+	});
+var mdgriffith$elm_ui$Element$el = F2(
+	function (attrs, child) {
+		return A4(
+			mdgriffith$elm_ui$Internal$Model$element,
+			mdgriffith$elm_ui$Internal$Model$asEl,
+			mdgriffith$elm_ui$Internal$Model$div,
+			A2(
+				elm$core$List$cons,
+				mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$shrink),
+				A2(
+					elm$core$List$cons,
+					mdgriffith$elm_ui$Element$height(mdgriffith$elm_ui$Element$shrink),
+					attrs)),
+			mdgriffith$elm_ui$Internal$Model$Unkeyed(
+				_List_fromArray(
+					[child])));
+	});
+var mdgriffith$elm_ui$Internal$Model$Fill = function (a) {
+	return {$: 'Fill', a: a};
+};
+var mdgriffith$elm_ui$Element$fill = mdgriffith$elm_ui$Internal$Model$Fill(1);
+var mdgriffith$elm_ui$Internal$Model$OnlyDynamic = F2(
+	function (a, b) {
+		return {$: 'OnlyDynamic', a: a, b: b};
+	});
+var mdgriffith$elm_ui$Internal$Model$StaticRootAndDynamic = F2(
+	function (a, b) {
+		return {$: 'StaticRootAndDynamic', a: a, b: b};
+	});
 var mdgriffith$elm_ui$Internal$Model$AllowHover = {$: 'AllowHover'};
 var mdgriffith$elm_ui$Internal$Model$Layout = {$: 'Layout'};
 var mdgriffith$elm_ui$Internal$Model$Rgba = F4(
@@ -9585,36 +9645,6 @@ var mdgriffith$elm_ui$Internal$Model$Px = function (a) {
 	return {$: 'Px', a: a};
 };
 var mdgriffith$elm_ui$Element$px = mdgriffith$elm_ui$Internal$Model$Px;
-var mdgriffith$elm_ui$Internal$Model$Height = function (a) {
-	return {$: 'Height', a: a};
-};
-var mdgriffith$elm_ui$Element$height = mdgriffith$elm_ui$Internal$Model$Height;
-var mdgriffith$elm_ui$Internal$Model$Content = {$: 'Content'};
-var mdgriffith$elm_ui$Element$shrink = mdgriffith$elm_ui$Internal$Model$Content;
-var mdgriffith$elm_ui$Internal$Model$Width = function (a) {
-	return {$: 'Width', a: a};
-};
-var mdgriffith$elm_ui$Element$width = mdgriffith$elm_ui$Internal$Model$Width;
-var mdgriffith$elm_ui$Internal$Model$AsRow = {$: 'AsRow'};
-var mdgriffith$elm_ui$Internal$Model$asRow = mdgriffith$elm_ui$Internal$Model$AsRow;
-var mdgriffith$elm_ui$Element$row = F2(
-	function (attrs, children) {
-		return A4(
-			mdgriffith$elm_ui$Internal$Model$element,
-			mdgriffith$elm_ui$Internal$Model$asRow,
-			mdgriffith$elm_ui$Internal$Model$div,
-			A2(
-				elm$core$List$cons,
-				mdgriffith$elm_ui$Internal$Model$htmlClass(mdgriffith$elm_ui$Internal$Style$classes.contentLeft + (' ' + mdgriffith$elm_ui$Internal$Style$classes.contentCenterY)),
-				A2(
-					elm$core$List$cons,
-					mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$shrink),
-					A2(
-						elm$core$List$cons,
-						mdgriffith$elm_ui$Element$height(mdgriffith$elm_ui$Element$shrink),
-						attrs))),
-			mdgriffith$elm_ui$Internal$Model$Unkeyed(children));
-	});
 var mdgriffith$elm_ui$Internal$Flag$spacing = mdgriffith$elm_ui$Internal$Flag$flag(3);
 var mdgriffith$elm_ui$Internal$Model$SpacingStyle = F3(
 	function (a, b, c) {
@@ -9931,7 +9961,7 @@ var author$project$Main$main = A2(
 				]))
 		]),
 	A2(
-		mdgriffith$elm_ui$Element$row,
+		mdgriffith$elm_ui$Element$column,
 		_List_fromArray(
 			[
 				mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$fill)
@@ -9939,11 +9969,14 @@ var author$project$Main$main = A2(
 		_List_fromArray(
 			[
 				A2(
+				mdgriffith$elm_ui$Element$el,
+				_List_Nil,
+				mdgriffith$elm_ui$Element$text('search')),
+				A2(
 				mdgriffith$elm_ui$Element$table,
 				_List_fromArray(
 					[
 						mdgriffith$elm_ui$Element$centerX,
-						mdgriffith$elm_ui$Element$centerY,
 						mdgriffith$elm_ui$Element$spacing(5),
 						mdgriffith$elm_ui$Element$padding(10)
 					]),
@@ -9951,29 +9984,28 @@ var author$project$Main$main = A2(
 					columns: _List_fromArray(
 						[
 							{
-							header: mdgriffith$elm_ui$Element$text('First Name'),
+							header: mdgriffith$elm_ui$Element$text('Name'),
 							view: function (person) {
-								return mdgriffith$elm_ui$Element$text(person.firstName);
+								return mdgriffith$elm_ui$Element$text(person.name);
 							},
 							width: mdgriffith$elm_ui$Element$px(200)
 						},
 							{
-							header: mdgriffith$elm_ui$Element$text('Last Name'),
+							header: mdgriffith$elm_ui$Element$text('Phone'),
 							view: function (person) {
-								return mdgriffith$elm_ui$Element$text(person.lastName);
+								return mdgriffith$elm_ui$Element$text(person.phone);
 							},
 							width: mdgriffith$elm_ui$Element$fill
 						},
 							{
-							header: mdgriffith$elm_ui$Element$text('Age'),
+							header: mdgriffith$elm_ui$Element$text('Company'),
 							view: function (person) {
-								return mdgriffith$elm_ui$Element$text(
-									elm$core$String$fromInt(person.age));
+								return mdgriffith$elm_ui$Element$text(person.company);
 							},
 							width: mdgriffith$elm_ui$Element$fill
 						}
 						]),
-					data: author$project$Main$persons
+					data: author$project$People$people
 				})
 			])));
 _Platform_export({'Main':{'init':_VirtualDom_init(author$project$Main$main)(0)(0)}});}(this));
