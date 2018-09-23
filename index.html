@@ -4820,6 +4820,7 @@ var author$project$Table$defaultColumnStyle = function (idx) {
 			altBackColor
 		]);
 };
+var elm$core$Basics$not = _Basics_not;
 var mdgriffith$elm_ui$Internal$Model$AlignX = function (a) {
 	return {$: 'AlignX', a: a};
 };
@@ -5261,7 +5262,6 @@ var mdgriffith$elm_ui$Internal$Model$Unstyled = function (a) {
 };
 var mdgriffith$elm_ui$Internal$Model$AsParagraph = {$: 'AsParagraph'};
 var mdgriffith$elm_ui$Internal$Model$asParagraph = mdgriffith$elm_ui$Internal$Model$AsParagraph;
-var elm$core$Basics$not = _Basics_not;
 var elm$html$Html$div = _VirtualDom_node('div');
 var elm$html$Html$p = _VirtualDom_node('p');
 var elm$html$Html$s = _VirtualDom_node('s');
@@ -10005,10 +10005,6 @@ var mdgriffith$elm_ui$Element$el = F2(
 				_List_fromArray(
 					[child])));
 	});
-var mdgriffith$elm_ui$Internal$Model$Fill = function (a) {
-	return {$: 'Fill', a: a};
-};
-var mdgriffith$elm_ui$Element$fill = mdgriffith$elm_ui$Internal$Model$Fill(1);
 var elm$html$Html$Attributes$alt = elm$html$Html$Attributes$stringProperty('alt');
 var elm$html$Html$Attributes$src = function (url) {
 	return A2(
@@ -10087,37 +10083,76 @@ var mdgriffith$elm_ui$Element$row = F2(
 						attrs))),
 			mdgriffith$elm_ui$Internal$Model$Unkeyed(children));
 	});
+var elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
+var elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 'Normal', a: a};
+};
+var elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			elm$virtual_dom$VirtualDom$on,
+			event,
+			elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		elm$html$Html$Events$on,
+		'click',
+		elm$json$Json$Decode$succeed(msg));
+};
+var mdgriffith$elm_ui$Element$Events$onClick = A2(elm$core$Basics$composeL, mdgriffith$elm_ui$Internal$Model$Attr, elm$html$Html$Events$onClick);
 var mdgriffith$elm_ui$Internal$Flag$fontWeight = mdgriffith$elm_ui$Internal$Flag$flag(13);
 var mdgriffith$elm_ui$Element$Font$bold = A2(mdgriffith$elm_ui$Internal$Model$Class, mdgriffith$elm_ui$Internal$Flag$fontWeight, mdgriffith$elm_ui$Internal$Style$classes.bold);
+var author$project$Table$viewHeader = F3(
+	function (state, toMsg, column) {
+		var sortUrl = _Utils_eq(state.sortField, column.columnId) ? ((!state.sortAscending) ? 'https://www.datatables.net/media/images/sort_desc.png' : 'https://www.datatables.net/media/images/sort_asc.png') : 'https://www.datatables.net/media/images/sort_both.png';
+		return A2(
+			mdgriffith$elm_ui$Element$row,
+			_List_fromArray(
+				[
+					mdgriffith$elm_ui$Element$Events$onClick(
+					toMsg(
+						_Utils_update(
+							state,
+							{sortAscending: !state.sortAscending, sortField: column.columnId})))
+				]),
+			_List_fromArray(
+				[
+					A2(
+					mdgriffith$elm_ui$Element$el,
+					_List_fromArray(
+						[
+							mdgriffith$elm_ui$Element$Border$color(
+							A3(mdgriffith$elm_ui$Element$rgb255, 55, 55, 55)),
+							mdgriffith$elm_ui$Element$Border$widthEach(
+							_Utils_update(
+								author$project$Common$edges,
+								{bottom: 1})),
+							mdgriffith$elm_ui$Element$Border$solid,
+							A2(mdgriffith$elm_ui$Element$paddingXY, 20, 8),
+							mdgriffith$elm_ui$Element$Font$bold
+						]),
+					mdgriffith$elm_ui$Element$text(column.header)),
+					A2(
+					mdgriffith$elm_ui$Element$image,
+					_List_fromArray(
+						[mdgriffith$elm_ui$Element$alignRight]),
+					{description: '', src: sortUrl})
+				]));
+	});
+var mdgriffith$elm_ui$Internal$Model$Fill = function (a) {
+	return {$: 'Fill', a: a};
+};
+var mdgriffith$elm_ui$Element$fill = mdgriffith$elm_ui$Internal$Model$Fill(1);
 var author$project$Table$customColumn = F3(
 	function (state, toMsg, column) {
 		return {
-			header: A2(
-				mdgriffith$elm_ui$Element$row,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						mdgriffith$elm_ui$Element$el,
-						_List_fromArray(
-							[
-								mdgriffith$elm_ui$Element$Border$color(
-								A3(mdgriffith$elm_ui$Element$rgb255, 55, 55, 55)),
-								mdgriffith$elm_ui$Element$Border$widthEach(
-								_Utils_update(
-									author$project$Common$edges,
-									{bottom: 1})),
-								mdgriffith$elm_ui$Element$Border$solid,
-								A2(mdgriffith$elm_ui$Element$paddingXY, 10, 8),
-								mdgriffith$elm_ui$Element$Font$bold
-							]),
-						mdgriffith$elm_ui$Element$text(column.header)),
-						A2(
-						mdgriffith$elm_ui$Element$image,
-						_List_fromArray(
-							[mdgriffith$elm_ui$Element$alignRight]),
-						{description: '', src: 'https://www.datatables.net/media/images/sort_asc.png'})
-					])),
+			header: A3(author$project$Table$viewHeader, state, toMsg, column),
 			view: F2(
 				function (idx, t) {
 					return A2(
@@ -10322,11 +10357,6 @@ var mdgriffith$elm_ui$Element$centerX = mdgriffith$elm_ui$Internal$Model$AlignX(
 var mdgriffith$elm_ui$Element$InternalIndexedColumn = function (a) {
 	return {$: 'InternalIndexedColumn', a: a};
 };
-var elm$core$Basics$composeL = F3(
-	function (g, f, x) {
-		return g(
-			f(x));
-	});
 var elm$core$List$any = F2(
 	function (isOkay, list) {
 		any:
@@ -10947,7 +10977,6 @@ var elm$html$Html$Events$alwaysStop = function (x) {
 var elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
 	return {$: 'MayStopPropagation', a: a};
 };
-var elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
 var elm$html$Html$Events$stopPropagationOn = F2(
 	function (event, decoder) {
 		return A2(

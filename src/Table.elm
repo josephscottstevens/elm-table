@@ -2,10 +2,13 @@ module Table exposing (ColumnStyle(..), RowsPerPage(..), State, defaultColumnSty
 
 --TODO
 {-
-   Sorting goes both ways
-   Not respenting RowsPerPage
+   Sorting doesnt reset to <->
+   Sorting doesnt sort
+   implement RowsPerPage
    Pagination not showing
+
    -- lower priority --
+   viewHeader bottom border only matching text
    Styles?
 -}
 
@@ -149,28 +152,14 @@ view state toMsg rows columns =
 
 customColumn : State -> (State -> msg) -> Column data msg -> Element.IndexedColumn data msg
 customColumn state toMsg column =
-    { header =
-        Element.row []
-            [ Element.el
-                [ Border.color (rgb255 55 55 55)
-                , Border.widthEach { edges | bottom = 1 }
-                , Border.solid
-                , Element.paddingXY 10 8
-                , Font.bold
-                ]
-                (Element.text column.header)
-            , Element.image [ Element.alignRight ]
-                { src = "https://www.datatables.net/media/images/sort_asc.png"
-                , description = ""
-                }
-            ]
+    { header = viewHeader state toMsg column
     , width = Element.fill
     , view = \idx t -> Element.el (defaultColumnStyle idx) (column.viewData t)
     }
 
 
-viewTh : State -> (State -> msg) -> Column data msg -> Element msg
-viewTh state toMsg column =
+viewHeader : State -> (State -> msg) -> Column data msg -> Element msg
+viewHeader state toMsg column =
     let
         sortUrl : String
         sortUrl =
@@ -186,11 +175,18 @@ viewTh state toMsg column =
     in
     Element.row
         [ Events.onClick (toMsg { state | sortAscending = not state.sortAscending, sortField = column.columnId }) ]
-        [ Element.image [ Element.alignRight ]
+        [ Element.el
+            [ Border.color (rgb255 55 55 55)
+            , Border.widthEach { edges | bottom = 1 }
+            , Border.solid
+            , Element.paddingXY 20 8
+            , Font.bold
+            ]
+            (Element.text column.header)
+        , Element.image [ Element.alignRight ]
             { src = sortUrl
             , description = ""
             }
-        , Element.text column.header
         ]
 
 
