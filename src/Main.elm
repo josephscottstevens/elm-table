@@ -21,7 +21,7 @@ type alias Model =
 emptyModel : Model
 emptyModel =
     { searchText = ""
-    , tableState = Table.init "" Table.All
+    , tableState = Table.init "" (Table.Exactly 10)
     }
 
 

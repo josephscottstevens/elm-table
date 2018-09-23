@@ -4336,7 +4336,9 @@ function _Browser_load(url)
 		}
 	}));
 }
-var author$project$Table$All = {$: 'All'};
+var author$project$Table$Exactly = function (a) {
+	return {$: 'Exactly', a: a};
+};
 var elm$core$Basics$True = {$: 'True'};
 var author$project$Table$init = F2(
 	function (sortedColumnheader, displayLength) {
@@ -4344,7 +4346,10 @@ var author$project$Table$init = F2(
 	});
 var author$project$Main$emptyModel = {
 	searchText: '',
-	tableState: A2(author$project$Table$init, '', author$project$Table$All)
+	tableState: A2(
+		author$project$Table$init,
+		'',
+		author$project$Table$Exactly(10))
 };
 var author$project$Main$update = F2(
 	function (msg, model) {

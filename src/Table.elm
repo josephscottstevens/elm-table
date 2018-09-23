@@ -1,5 +1,14 @@
 module Table exposing (ColumnStyle(..), RowsPerPage(..), State, defaultColumnStyle, init, stringColumn, view)
 
+--TODO
+{-
+   Sorting goes both ways
+   Not respenting RowsPerPage
+   Pagination not showing
+   -- lower priority --
+   Styles?
+-}
+
 import Common exposing (edges)
 import Element exposing (Element, rgb255)
 import Element.Background as Background
