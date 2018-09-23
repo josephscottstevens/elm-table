@@ -158,6 +158,11 @@ customColumn state toMsg column =
     }
 
 
+updateSort : State -> (State -> msg) -> String -> msg
+updateSort state toMsg columnId =
+    toMsg { state | sortAscending = not state.sortAscending, sortField = columnId }
+
+
 viewHeader : State -> (State -> msg) -> Column data msg -> Element msg
 viewHeader state toMsg column =
     let
@@ -174,7 +179,7 @@ viewHeader state toMsg column =
                 "https://www.datatables.net/media/images/sort_both.png"
     in
     Element.row
-        [ Events.onClick (toMsg { state | sortAscending = not state.sortAscending, sortField = column.columnId }) ]
+        [ Events.onClick (updateSort state toMsg column.columnId) ]
         [ Element.el
             [ Border.color (rgb255 55 55 55)
             , Border.widthEach { edges | bottom = 1 }
