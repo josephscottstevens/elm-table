@@ -1,4 +1,4 @@
-module Table exposing (RowsPerPage, State, defaultColumnStyle, init, view)
+module Table exposing (ColumnStyle(..), RowsPerPage(..), State, defaultColumnStyle, init, stringColumn, view)
 
 import Common exposing (edges)
 import Element exposing (Element, rgb255)
@@ -42,6 +42,7 @@ type alias State =
 
 type ColumnStyle
     = NoStyle
+    | Auto
     | Width Int
     | CustomStyle (List ( String, String ))
 
@@ -58,7 +59,7 @@ type Page
 
 type alias Column data msg =
     { header : String
-    , viewData : Int -> data -> Element msg
+    , viewData : data -> Element msg
     , columnStyle : ColumnStyle
     , sorter : Sorter data
     , columnId : String
@@ -123,22 +124,22 @@ view state rows columns =
             List.length rows
     in
     Element.row []
-        [ Element.indexedTable
+        [ Element.table
             [ Element.centerX
             , Border.color (rgb255 55 55 55)
             , Border.widthEach { edges | bottom = 1 }
             , Border.solid
             ]
             { data = rows
-            , columns = List.map customColumn columns
+            , columns = List.indexedMap customColumn columns
             }
 
         --, viewPagination state.rowsPerPage
         ]
 
 
-customColumn : Column data msg -> Element.IndexedColumn data msg
-customColumn column =
+customColumn : Int -> Column data msg -> Element.Column data msg
+customColumn idx column =
     { header =
         Element.row []
             [ Element.el

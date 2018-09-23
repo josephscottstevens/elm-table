@@ -14,12 +14,15 @@ import Table
 
 type alias Model =
     { searchText : String
+    , tableState : Table.State
     }
 
 
 emptyModel : Model
 emptyModel =
-    { searchText = "" }
+    { searchText = ""
+    , tableState = Table.init "" Table.All
+    }
 
 
 type Msg
@@ -61,12 +64,13 @@ view model =
                     }
                 ]
             , Table.view
+                model.tableState
                 (filter model.searchText people)
-                [ Table.stringColumn "Name" .name
-                , Table.stringColumn "Phone" .phone
-                , Table.stringColumn "Company" .company
-                , Table.stringColumn "Address" .address
-                , Table.stringColumn "City" .city
+                [ Table.stringColumn "Name" .name Table.Auto
+                , Table.stringColumn "Phone" .phone Table.Auto
+                , Table.stringColumn "Company" .company Table.Auto
+                , Table.stringColumn "Address" .address Table.Auto
+                , Table.stringColumn "City" .city Table.Auto
                 ]
             ]
 
