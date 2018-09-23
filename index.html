@@ -4341,8 +4341,8 @@ var author$project$Table$Exactly = function (a) {
 };
 var elm$core$Basics$True = {$: 'True'};
 var author$project$Table$init = F2(
-	function (sortedColumnheader, displayLength) {
-		return {pageIndex: 0, rowsPerPage: displayLength, sortAscending: true, sortField: sortedColumnheader};
+	function (sortedColumnheader, rowsPerPage) {
+		return {pageIndex: 0, rowsPerPage: rowsPerPage, sortAscending: true, sortField: sortedColumnheader};
 	});
 var author$project$Main$emptyModel = {
 	searchText: '',
@@ -4353,13 +4353,23 @@ var author$project$Main$emptyModel = {
 };
 var author$project$Main$update = F2(
 	function (msg, model) {
-		var str = msg.a;
-		return _Utils_update(
-			model,
-			{searchText: str});
+		if (msg.$ === 'UpdateSearch') {
+			var str = msg.a;
+			return _Utils_update(
+				model,
+				{searchText: str});
+		} else {
+			var tableState = msg.a;
+			return _Utils_update(
+				model,
+				{tableState: tableState});
+		}
 	});
 var author$project$Main$UpdateSearch = function (a) {
 	return {$: 'UpdateSearch', a: a};
+};
+var author$project$Main$UpdateTableState = function (a) {
+	return {$: 'UpdateTableState', a: a};
 };
 var elm$core$Basics$apR = F2(
 	function (x, f) {
@@ -10079,44 +10089,45 @@ var mdgriffith$elm_ui$Element$row = F2(
 	});
 var mdgriffith$elm_ui$Internal$Flag$fontWeight = mdgriffith$elm_ui$Internal$Flag$flag(13);
 var mdgriffith$elm_ui$Element$Font$bold = A2(mdgriffith$elm_ui$Internal$Model$Class, mdgriffith$elm_ui$Internal$Flag$fontWeight, mdgriffith$elm_ui$Internal$Style$classes.bold);
-var author$project$Table$customColumn = function (column) {
-	return {
-		header: A2(
-			mdgriffith$elm_ui$Element$row,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A2(
-					mdgriffith$elm_ui$Element$el,
-					_List_fromArray(
-						[
-							mdgriffith$elm_ui$Element$Border$color(
-							A3(mdgriffith$elm_ui$Element$rgb255, 55, 55, 55)),
-							mdgriffith$elm_ui$Element$Border$widthEach(
-							_Utils_update(
-								author$project$Common$edges,
-								{bottom: 1})),
-							mdgriffith$elm_ui$Element$Border$solid,
-							A2(mdgriffith$elm_ui$Element$paddingXY, 10, 8),
-							mdgriffith$elm_ui$Element$Font$bold
-						]),
-					mdgriffith$elm_ui$Element$text(column.header)),
-					A2(
-					mdgriffith$elm_ui$Element$image,
-					_List_fromArray(
-						[mdgriffith$elm_ui$Element$alignRight]),
-					{description: '', src: 'https://www.datatables.net/media/images/sort_asc.png'})
-				])),
-		view: F2(
-			function (idx, t) {
-				return A2(
-					mdgriffith$elm_ui$Element$el,
-					author$project$Table$defaultColumnStyle(idx),
-					column.viewData(t));
-			}),
-		width: mdgriffith$elm_ui$Element$fill
-	};
-};
+var author$project$Table$customColumn = F3(
+	function (state, toMsg, column) {
+		return {
+			header: A2(
+				mdgriffith$elm_ui$Element$row,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						mdgriffith$elm_ui$Element$el,
+						_List_fromArray(
+							[
+								mdgriffith$elm_ui$Element$Border$color(
+								A3(mdgriffith$elm_ui$Element$rgb255, 55, 55, 55)),
+								mdgriffith$elm_ui$Element$Border$widthEach(
+								_Utils_update(
+									author$project$Common$edges,
+									{bottom: 1})),
+								mdgriffith$elm_ui$Element$Border$solid,
+								A2(mdgriffith$elm_ui$Element$paddingXY, 10, 8),
+								mdgriffith$elm_ui$Element$Font$bold
+							]),
+						mdgriffith$elm_ui$Element$text(column.header)),
+						A2(
+						mdgriffith$elm_ui$Element$image,
+						_List_fromArray(
+							[mdgriffith$elm_ui$Element$alignRight]),
+						{description: '', src: 'https://www.datatables.net/media/images/sort_asc.png'})
+					])),
+			view: F2(
+				function (idx, t) {
+					return A2(
+						mdgriffith$elm_ui$Element$el,
+						author$project$Table$defaultColumnStyle(idx),
+						column.viewData(t));
+				}),
+			width: mdgriffith$elm_ui$Element$fill
+		};
+	});
 var author$project$Table$applySorter = F3(
 	function (isReversed, sorter, data) {
 		if (sorter.$ === 'None') {
@@ -10564,8 +10575,8 @@ var mdgriffith$elm_ui$Element$indexedTable = F2(
 				data: config.data
 			});
 	});
-var author$project$Table$view = F3(
-	function (state, rows, columns) {
+var author$project$Table$view = F4(
+	function (state, toMsg, rows, columns) {
 		var totalRows = elm$core$List$length(rows);
 		var sortedRows = A3(author$project$Table$sort, state, columns, rows);
 		var filteredRows = function () {
@@ -10599,7 +10610,12 @@ var author$project$Table$view = F3(
 							mdgriffith$elm_ui$Element$Border$solid
 						]),
 					{
-						columns: A2(elm$core$List$map, author$project$Table$customColumn, columns),
+						columns: A2(
+							elm$core$List$map,
+							function (column) {
+								return A3(author$project$Table$customColumn, state, toMsg, column);
+							},
+							columns),
 						data: rows
 					})
 				]));
@@ -11676,9 +11692,10 @@ var author$project$Main$view = function (model) {
 								text: model.searchText
 							})
 						])),
-					A3(
+					A4(
 					author$project$Table$view,
 					model.tableState,
+					author$project$Main$UpdateTableState,
 					A2(author$project$Main$filter, model.searchText, author$project$People$people),
 					_List_fromArray(
 						[

@@ -27,6 +27,7 @@ emptyModel =
 
 type Msg
     = UpdateSearch String
+    | UpdateTableState Table.State
 
 
 update : Msg -> Model -> Model
@@ -34,6 +35,9 @@ update msg model =
     case msg of
         UpdateSearch str ->
             { model | searchText = str }
+
+        UpdateTableState tableState ->
+            { model | tableState = tableState }
 
 
 view model =
@@ -65,6 +69,7 @@ view model =
                 ]
             , Table.view
                 model.tableState
+                UpdateTableState
                 (filter model.searchText people)
                 [ Table.stringColumn "Name" .name Table.Auto
                 , Table.stringColumn "Phone" .phone Table.Auto

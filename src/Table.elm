@@ -28,9 +28,9 @@ blockSize =
 
 
 init : String -> RowsPerPage -> State
-init sortedColumnheader displayLength =
+init sortedColumnheader rowsPerPage =
     { pageIndex = 0
-    , rowsPerPage = displayLength
+    , rowsPerPage = rowsPerPage
     , sortField = sortedColumnheader
     , sortAscending = True
     }
@@ -113,8 +113,8 @@ stringColumn header data columnStyle =
 --         ]
 
 
-view : State -> List data -> List (Column data msg) -> Element msg
-view state rows columns =
+view : State -> (State -> msg) -> List data -> List (Column data msg) -> Element msg
+view state toMsg rows columns =
     let
         sortedRows =
             sort state columns rows
@@ -140,15 +140,15 @@ view state rows columns =
             , Border.solid
             ]
             { data = rows
-            , columns = List.map customColumn columns
+            , columns = List.map (\column -> customColumn state toMsg column) columns
             }
 
         --, viewPagination state.rowsPerPage
         ]
 
 
-customColumn : Column data msg -> Element.IndexedColumn data msg
-customColumn column =
+customColumn : State -> (State -> msg) -> Column data msg -> Element.IndexedColumn data msg
+customColumn state toMsg column =
     { header =
         Element.row []
             [ Element.el
@@ -169,8 +169,8 @@ customColumn column =
     }
 
 
-viewTh : State -> Column data msg -> (State -> msg) -> Element msg
-viewTh state column toMsg =
+viewTh : State -> (State -> msg) -> Column data msg -> Element msg
+viewTh state toMsg column =
     let
         sortUrl : String
         sortUrl =
