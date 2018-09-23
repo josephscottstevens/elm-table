@@ -122,7 +122,7 @@ view state toMsg rows columns =
         sortedRows =
             sort state columns rows
 
-        filteredRows =
+        paginatedAndSortedRows =
             case state.rowsPerPage of
                 Exactly rowsPerPage ->
                     sortedRows
@@ -142,7 +142,7 @@ view state toMsg rows columns =
             , Border.widthEach { edges | bottom = 1 }
             , Border.solid
             ]
-            { data = rows
+            { data = paginatedAndSortedRows
             , columns = List.map (\column -> customColumn state toMsg column) columns
             }
 

@@ -10609,7 +10609,7 @@ var author$project$Table$view = F4(
 	function (state, toMsg, rows, columns) {
 		var totalRows = elm$core$List$length(rows);
 		var sortedRows = A3(author$project$Table$sort, state, columns, rows);
-		var filteredRows = function () {
+		var paginatedAndSortedRows = function () {
 			var _n0 = state.rowsPerPage;
 			if (_n0.$ === 'Exactly') {
 				var rowsPerPage = _n0.a;
@@ -10646,7 +10646,7 @@ var author$project$Table$view = F4(
 								return A3(author$project$Table$customColumn, state, toMsg, column);
 							},
 							columns),
-						data: rows
+						data: paginatedAndSortedRows
 					})
 				]));
 	});
