@@ -4871,7 +4871,7 @@ var author$project$Main$emptyModel = {
 	searchText: '',
 	tableState: A2(
 		author$project$Table$init,
-		'',
+		'Name',
 		author$project$Table$Exactly(10))
 };
 var author$project$Main$update = F2(
@@ -5343,10 +5343,14 @@ var author$project$Table$defaultColumnStyle = function (idx) {
 			altBackColor
 		]);
 };
+var elm$core$Basics$False = {$: 'False'};
 var elm$core$Basics$not = _Basics_not;
 var author$project$Table$updateSort = F3(
 	function (state, toMsg, columnId) {
-		return toMsg(
+		return (_Utils_eq(state.sortField, columnId) && (!state.sortAscending)) ? toMsg(
+			_Utils_update(
+				state,
+				{sortAscending: false, sortField: ''})) : toMsg(
 			_Utils_update(
 				state,
 				{sortAscending: !state.sortAscending, sortField: columnId}));
@@ -5404,7 +5408,6 @@ var elm$core$Basics$apL = F2(
 	function (f, x) {
 		return f(x);
 	});
-var elm$core$Basics$False = {$: 'False'};
 var elm$core$List$isEmpty = function (xs) {
 	if (!xs.b) {
 		return true;
@@ -10690,47 +10693,52 @@ var author$project$Table$customColumn = F3(
 			width: mdgriffith$elm_ui$Element$fill
 		};
 	});
-var author$project$Table$applySorter = F3(
-	function (isReversed, sorter, data) {
-		if (sorter.$ === 'None') {
-			return data;
+var author$project$Table$First = {$: 'First'};
+var author$project$Table$Index = function (a) {
+	return {$: 'Index', a: a};
+};
+var author$project$Table$Last = {$: 'Last'};
+var author$project$Table$Next = {$: 'Next'};
+var author$project$Table$Previous = {$: 'Previous'};
+var author$project$Table$blockSize = 15;
+var author$project$Table$getLastIndex = F2(
+	function (totalRows, rowsPerPage) {
+		if (rowsPerPage.$ === 'Exactly') {
+			var t = rowsPerPage.a;
+			return (totalRows / t) | 0;
 		} else {
-			var sortOp = sorter.a;
-			return isReversed ? elm$core$List$reverse(
-				sortOp(data)) : sortOp(data);
+			return ((totalRows - 1) <= 0) ? 0 : (totalRows - 1);
 		}
 	});
-var author$project$Table$findSorter = F2(
-	function (selectedColumn, columnData) {
-		findSorter:
-		while (true) {
-			if (!columnData.b) {
-				return elm$core$Maybe$Nothing;
-			} else {
-				var columnId = columnData.a.columnId;
-				var sorter = columnData.a.sorter;
-				var remainingColumnData = columnData.b;
-				if (_Utils_eq(columnId, selectedColumn)) {
-					return elm$core$Maybe$Just(sorter);
-				} else {
-					var $temp$selectedColumn = selectedColumn,
-						$temp$columnData = remainingColumnData;
-					selectedColumn = $temp$selectedColumn;
-					columnData = $temp$columnData;
-					continue findSorter;
-				}
+var author$project$Table$setPagingState = F4(
+	function (state, totalRows, toMsg, page) {
+		var lastIndex = A2(author$project$Table$getLastIndex, totalRows, state.rowsPerPage);
+		var bounded = function (t) {
+			return (_Utils_cmp(t, lastIndex) > 0) ? lastIndex : ((t < 0) ? 0 : t);
+		};
+		var newIndex = function () {
+			switch (page.$) {
+				case 'First':
+					return 0;
+				case 'Previous':
+					return bounded(state.pageIndex - 1);
+				case 'PreviousBlock':
+					return bounded(state.pageIndex - author$project$Table$blockSize);
+				case 'Index':
+					var t = page.a;
+					return bounded(t);
+				case 'NextBlock':
+					return bounded(state.pageIndex + author$project$Table$blockSize);
+				case 'Next':
+					return bounded(state.pageIndex + 1);
+				default:
+					return lastIndex;
 			}
-		}
-	});
-var author$project$Table$sort = F3(
-	function (state, columnData, data) {
-		var _n0 = A2(author$project$Table$findSorter, state.sortField, columnData);
-		if (_n0.$ === 'Nothing') {
-			return data;
-		} else {
-			var sorter = _n0.a;
-			return A3(author$project$Table$applySorter, state.sortAscending, sorter, data);
-		}
+		}();
+		return toMsg(
+			_Utils_update(
+				state,
+				{pageIndex: newIndex}));
 	});
 var elm$core$List$drop = F2(
 	function (n, list) {
@@ -10879,11 +10887,23 @@ var elm$core$List$take = F2(
 	function (n, list) {
 		return A3(elm$core$List$takeFast, 0, n, list);
 	});
-var mdgriffith$elm_ui$Internal$Model$CenterX = {$: 'CenterX'};
-var mdgriffith$elm_ui$Element$centerX = mdgriffith$elm_ui$Internal$Model$AlignX(mdgriffith$elm_ui$Internal$Model$CenterX);
-var mdgriffith$elm_ui$Element$InternalIndexedColumn = function (a) {
-	return {$: 'InternalIndexedColumn', a: a};
+var elm$json$Json$Encode$bool = _Json_wrap;
+var elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			elm$json$Json$Encode$bool(bool));
+	});
+var elm$html$Html$Attributes$disabled = elm$html$Html$Attributes$boolProperty('disabled');
+var elm$html$Html$Attributes$tabindex = function (n) {
+	return A2(
+		_VirtualDom_attribute,
+		'tabIndex',
+		elm$core$String$fromInt(n));
 };
+var mdgriffith$elm_ui$Internal$Flag$cursor = mdgriffith$elm_ui$Internal$Flag$flag(21);
+var mdgriffith$elm_ui$Element$pointer = A2(mdgriffith$elm_ui$Internal$Model$Class, mdgriffith$elm_ui$Internal$Flag$cursor, mdgriffith$elm_ui$Internal$Style$classes.cursorPointer);
 var elm$core$List$any = F2(
 	function (isOkay, list) {
 		any:
@@ -10905,6 +10925,226 @@ var elm$core$List$any = F2(
 			}
 		}
 	});
+var mdgriffith$elm_ui$Element$Input$hasFocusStyle = function (attr) {
+	if (((attr.$ === 'StyleClass') && (attr.b.$ === 'PseudoSelector')) && (attr.b.a.$ === 'Focus')) {
+		var _n1 = attr.b;
+		var _n2 = _n1.a;
+		return true;
+	} else {
+		return false;
+	}
+};
+var mdgriffith$elm_ui$Internal$Model$NoAttribute = {$: 'NoAttribute'};
+var mdgriffith$elm_ui$Element$Input$focusDefault = function (attrs) {
+	return A2(elm$core$List$any, mdgriffith$elm_ui$Element$Input$hasFocusStyle, attrs) ? mdgriffith$elm_ui$Internal$Model$NoAttribute : mdgriffith$elm_ui$Internal$Model$htmlClass('focusable');
+};
+var mdgriffith$elm_ui$Element$Input$enter = 'Enter';
+var elm$virtual_dom$VirtualDom$MayPreventDefault = function (a) {
+	return {$: 'MayPreventDefault', a: a};
+};
+var elm$html$Html$Events$preventDefaultOn = F2(
+	function (event, decoder) {
+		return A2(
+			elm$virtual_dom$VirtualDom$on,
+			event,
+			elm$virtual_dom$VirtualDom$MayPreventDefault(decoder));
+	});
+var elm$json$Json$Decode$andThen = _Json_andThen;
+var elm$json$Json$Decode$fail = _Json_fail;
+var elm$json$Json$Decode$field = _Json_decodeField;
+var elm$json$Json$Decode$string = _Json_decodeString;
+var mdgriffith$elm_ui$Element$Input$onKey = F2(
+	function (desiredCode, msg) {
+		var decode = function (code) {
+			return _Utils_eq(code, desiredCode) ? elm$json$Json$Decode$succeed(msg) : elm$json$Json$Decode$fail('Not the enter key');
+		};
+		var isKey = A2(
+			elm$json$Json$Decode$andThen,
+			decode,
+			A2(elm$json$Json$Decode$field, 'key', elm$json$Json$Decode$string));
+		return mdgriffith$elm_ui$Internal$Model$Attr(
+			A2(
+				elm$html$Html$Events$preventDefaultOn,
+				'keyup',
+				A2(
+					elm$json$Json$Decode$map,
+					function (fired) {
+						return _Utils_Tuple2(fired, true);
+					},
+					isKey)));
+	});
+var mdgriffith$elm_ui$Element$Input$onEnter = function (msg) {
+	return A2(mdgriffith$elm_ui$Element$Input$onKey, mdgriffith$elm_ui$Element$Input$enter, msg);
+};
+var mdgriffith$elm_ui$Internal$Model$Button = {$: 'Button'};
+var mdgriffith$elm_ui$Internal$Model$Describe = function (a) {
+	return {$: 'Describe', a: a};
+};
+var mdgriffith$elm_ui$Element$Input$button = F2(
+	function (attrs, _n0) {
+		var onPress = _n0.onPress;
+		var label = _n0.label;
+		return A4(
+			mdgriffith$elm_ui$Internal$Model$element,
+			mdgriffith$elm_ui$Internal$Model$asEl,
+			mdgriffith$elm_ui$Internal$Model$div,
+			A2(
+				elm$core$List$cons,
+				mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$shrink),
+				A2(
+					elm$core$List$cons,
+					mdgriffith$elm_ui$Element$height(mdgriffith$elm_ui$Element$shrink),
+					A2(
+						elm$core$List$cons,
+						mdgriffith$elm_ui$Internal$Model$htmlClass(mdgriffith$elm_ui$Internal$Style$classes.contentCenterX),
+						A2(
+							elm$core$List$cons,
+							mdgriffith$elm_ui$Internal$Model$htmlClass(mdgriffith$elm_ui$Internal$Style$classes.contentCenterY),
+							A2(
+								elm$core$List$cons,
+								mdgriffith$elm_ui$Internal$Model$htmlClass(mdgriffith$elm_ui$Internal$Style$classes.seButton),
+								A2(
+									elm$core$List$cons,
+									mdgriffith$elm_ui$Element$pointer,
+									A2(
+										elm$core$List$cons,
+										mdgriffith$elm_ui$Element$Input$focusDefault(attrs),
+										A2(
+											elm$core$List$cons,
+											mdgriffith$elm_ui$Internal$Model$Describe(mdgriffith$elm_ui$Internal$Model$Button),
+											A2(
+												elm$core$List$cons,
+												mdgriffith$elm_ui$Internal$Model$Attr(
+													elm$html$Html$Attributes$tabindex(0)),
+												function () {
+													if (onPress.$ === 'Nothing') {
+														return A2(
+															elm$core$List$cons,
+															mdgriffith$elm_ui$Internal$Model$Attr(
+																elm$html$Html$Attributes$disabled(true)),
+															attrs);
+													} else {
+														var msg = onPress.a;
+														return A2(
+															elm$core$List$cons,
+															mdgriffith$elm_ui$Element$Events$onClick(msg),
+															A2(
+																elm$core$List$cons,
+																mdgriffith$elm_ui$Element$Input$onEnter(msg),
+																attrs));
+													}
+												}()))))))))),
+			mdgriffith$elm_ui$Internal$Model$Unkeyed(
+				_List_fromArray(
+					[label])));
+	});
+var author$project$Table$pagingView = F3(
+	function (state, toMsg, rows) {
+		var totalRows = elm$core$List$length(rows);
+		var pagingStateClick = function (page) {
+			return A4(author$project$Table$setPagingState, state, totalRows, toMsg, page);
+		};
+		var leftPageClick = (state.pageIndex > 0) ? elm$core$Maybe$Just(
+			pagingStateClick(author$project$Table$Previous)) : elm$core$Maybe$Nothing;
+		var lastIndex = function () {
+			var _n0 = state.rowsPerPage;
+			if (_n0.$ === 'Exactly') {
+				var t = _n0.a;
+				return (totalRows / t) | 0;
+			} else {
+				return 0;
+			}
+		}();
+		var lastPageClick = (_Utils_cmp(state.pageIndex, lastIndex) < 0) ? elm$core$Maybe$Just(
+			pagingStateClick(author$project$Table$Last)) : elm$core$Maybe$Nothing;
+		var rightPageClick = (_Utils_cmp(state.pageIndex, lastIndex) < 0) ? elm$core$Maybe$Just(
+			pagingStateClick(author$project$Table$Next)) : elm$core$Maybe$Nothing;
+		var firstPageClick = (state.pageIndex > 1) ? elm$core$Maybe$Just(
+			pagingStateClick(author$project$Table$First)) : elm$core$Maybe$Nothing;
+		var activeOrNot = function (pageIndex) {
+			var maybeClick = _Utils_eq(pageIndex, state.pageIndex) ? elm$core$Maybe$Just(
+				pagingStateClick(
+					author$project$Table$Index(pageIndex))) : elm$core$Maybe$Nothing;
+			return A2(
+				mdgriffith$elm_ui$Element$Input$button,
+				_List_Nil,
+				{
+					label: mdgriffith$elm_ui$Element$text(
+						elm$core$String$fromInt(pageIndex + 1)),
+					onPress: maybeClick
+				});
+		};
+		var rng = A2(
+			elm$core$List$map,
+			activeOrNot,
+			A2(
+				elm$core$List$take,
+				author$project$Table$blockSize,
+				A2(
+					elm$core$List$drop,
+					((state.pageIndex / author$project$Table$blockSize) | 0) * author$project$Table$blockSize,
+					A2(elm$core$List$range, 0, lastIndex))));
+		return A2(
+			mdgriffith$elm_ui$Element$row,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					mdgriffith$elm_ui$Element$Input$button,
+					_List_Nil,
+					{
+						label: mdgriffith$elm_ui$Element$text('First'),
+						onPress: firstPageClick
+					})
+				]));
+	});
+var author$project$Table$applySorter = F3(
+	function (isReversed, sorter, data) {
+		if (sorter.$ === 'None') {
+			return data;
+		} else {
+			var sortOp = sorter.a;
+			return isReversed ? sortOp(data) : elm$core$List$reverse(
+				sortOp(data));
+		}
+	});
+var author$project$Table$findSorter = F2(
+	function (selectedColumn, columnData) {
+		findSorter:
+		while (true) {
+			if (!columnData.b) {
+				return elm$core$Maybe$Nothing;
+			} else {
+				var columnId = columnData.a.columnId;
+				var sorter = columnData.a.sorter;
+				var remainingColumnData = columnData.b;
+				if (_Utils_eq(columnId, selectedColumn)) {
+					return elm$core$Maybe$Just(sorter);
+				} else {
+					var $temp$selectedColumn = selectedColumn,
+						$temp$columnData = remainingColumnData;
+					selectedColumn = $temp$selectedColumn;
+					columnData = $temp$columnData;
+					continue findSorter;
+				}
+			}
+		}
+	});
+var author$project$Table$sort = F3(
+	function (state, columnData, data) {
+		var _n0 = A2(author$project$Table$findSorter, state.sortField, columnData);
+		if (_n0.$ === 'Nothing') {
+			return data;
+		} else {
+			var sorter = _n0.a;
+			return A3(author$project$Table$applySorter, state.sortAscending, sorter, data);
+		}
+	});
+var mdgriffith$elm_ui$Internal$Model$CenterX = {$: 'CenterX'};
+var mdgriffith$elm_ui$Element$centerX = mdgriffith$elm_ui$Internal$Model$AlignX(mdgriffith$elm_ui$Internal$Model$CenterX);
+var mdgriffith$elm_ui$Element$InternalIndexedColumn = function (a) {
+	return {$: 'InternalIndexedColumn', a: a};
+};
 var elm$core$List$all = F2(
 	function (isOkay, list) {
 		return !A2(
@@ -11174,7 +11414,8 @@ var author$project$Table$view = F4(
 							},
 							columns),
 						data: paginatedAndSortedRows
-					})
+					}),
+					A3(author$project$Table$pagingView, state, toMsg, rows)
 				]));
 	});
 var mdgriffith$elm_ui$Internal$Model$AlignY = function (a) {
@@ -11511,12 +11752,10 @@ var elm$html$Html$Events$stopPropagationOn = F2(
 			event,
 			elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
 	});
-var elm$json$Json$Decode$field = _Json_decodeField;
 var elm$json$Json$Decode$at = F2(
 	function (fields, decoder) {
 		return A3(elm$core$List$foldr, elm$json$Json$Decode$field, decoder, fields);
 	});
-var elm$json$Json$Decode$string = _Json_decodeString;
 var elm$html$Html$Events$targetValue = A2(
 	elm$json$Json$Decode$at,
 	_List_fromArray(
@@ -11726,37 +11965,12 @@ var mdgriffith$elm_ui$Element$Input$defaultTextBoxStyle = _List_fromArray(
 		mdgriffith$elm_ui$Element$Border$width(1),
 		mdgriffith$elm_ui$Element$spacing(3)
 	]);
-var mdgriffith$elm_ui$Element$Input$hasFocusStyle = function (attr) {
-	if (((attr.$ === 'StyleClass') && (attr.b.$ === 'PseudoSelector')) && (attr.b.a.$ === 'Focus')) {
-		var _n1 = attr.b;
-		var _n2 = _n1.a;
-		return true;
-	} else {
-		return false;
-	}
-};
-var mdgriffith$elm_ui$Internal$Model$NoAttribute = {$: 'NoAttribute'};
-var mdgriffith$elm_ui$Element$Input$focusDefault = function (attrs) {
-	return A2(elm$core$List$any, mdgriffith$elm_ui$Element$Input$hasFocusStyle, attrs) ? mdgriffith$elm_ui$Internal$Model$NoAttribute : mdgriffith$elm_ui$Internal$Model$htmlClass('focusable');
-};
-var elm$json$Json$Encode$bool = _Json_wrap;
-var elm$html$Html$Attributes$boolProperty = F2(
-	function (key, bool) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			elm$json$Json$Encode$bool(bool));
-	});
 var elm$html$Html$Attributes$spellcheck = elm$html$Html$Attributes$boolProperty('spellcheck');
 var mdgriffith$elm_ui$Element$Input$spellcheck = A2(elm$core$Basics$composeL, mdgriffith$elm_ui$Internal$Model$Attr, elm$html$Html$Attributes$spellcheck);
 var elm$html$Html$Attributes$value = elm$html$Html$Attributes$stringProperty('value');
 var mdgriffith$elm_ui$Element$Input$value = A2(elm$core$Basics$composeL, mdgriffith$elm_ui$Internal$Model$Attr, elm$html$Html$Attributes$value);
-var mdgriffith$elm_ui$Internal$Model$Describe = function (a) {
-	return {$: 'Describe', a: a};
-};
 var mdgriffith$elm_ui$Internal$Model$LivePolite = {$: 'LivePolite'};
 var mdgriffith$elm_ui$Element$Region$announce = mdgriffith$elm_ui$Internal$Model$Describe(mdgriffith$elm_ui$Internal$Model$LivePolite);
-var mdgriffith$elm_ui$Internal$Flag$cursor = mdgriffith$elm_ui$Internal$Flag$flag(21);
 var mdgriffith$elm_ui$Internal$Model$filter = function (attrs) {
 	return A3(
 		elm$core$List$foldr,

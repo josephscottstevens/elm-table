@@ -2,14 +2,12 @@ module Table exposing (ColumnStyle(..), RowsPerPage(..), State, defaultColumnSty
 
 --TODO
 {-
-   Sorting doesnt reset to <->
-   Sorting doesnt sort
-   implement RowsPerPage
-   Pagination not showing
+   fix pagingView, showing up on right, and no pages are showing.
 
    -- lower priority --
    viewHeader bottom border only matching text
-   Styles?
+   Columns jump around in widths on sort
+   Compare Styles to Jquery
 -}
 
 import Common exposing (edges)
@@ -89,31 +87,7 @@ stringColumn header data columnStyle =
 
 
 
--- https://www.datatables.net/media/images/sort_asc.png
--- https://www.datatables.net/media/images/sort_both.png
--- https://www.datatables.net/media/images/sort_desc.png
 -- VIEW
--- viewPagination : State -> (State -> msg) -> Element msg
--- viewPagination state toMsg =
---     let
---         optionLength =
---             viewSelect state.rowsPerPage
---     in
---     div
---         [ class "detailsEntitlementToolbar", id "searchResultsTable_length" ]
---         [ label []
---             [ text "Show "
---             , select [ id "pageLengthSelect", Events.onInput (\t -> toMsg { state | rowsPerPage = pageSelect t }) ]
---                 [ option
---                     [ value "50", selected (optionLength == "50") ]
---                     [ text "50" ]
---                 , option [ value "100", selected (optionLength == "100") ] [ text "100" ]
---                 , option [ value "150", selected (optionLength == "150") ] [ text "150" ]
---                 , option [ value "200", selected (optionLength == "200") ] [ text "200" ]
---                 , option [ value "-1", selected (optionLength == "-1") ] [ text "All" ]
---                 ]
---             ]
---         ]
 
 
 view : State -> (State -> msg) -> List data -> List (Column data msg) -> Element msg
@@ -145,8 +119,7 @@ view state toMsg rows columns =
             { data = paginatedAndSortedRows
             , columns = List.map (\column -> customColumn state toMsg column) columns
             }
-
-        --, viewPagination state.rowsPerPage
+        , pagingView state toMsg rows
         ]
 
 
@@ -160,7 +133,11 @@ customColumn state toMsg column =
 
 updateSort : State -> (State -> msg) -> String -> msg
 updateSort state toMsg columnId =
-    toMsg { state | sortAscending = not state.sortAscending, sortField = columnId }
+    if state.sortField == columnId && state.sortAscending == False then
+        toMsg { state | sortAscending = False, sortField = "" }
+
+    else
+        toMsg { state | sortAscending = not state.sortAscending, sortField = columnId }
 
 
 viewHeader : State -> (State -> msg) -> Column data msg -> Element msg
@@ -309,9 +286,12 @@ pagerText state totalRows =
             "Showing " ++ currentPageText ++ " to " ++ totalItemsText ++ " of " ++ totalPagesText ++ " entries"
 
 
-pagingView : State -> Int -> List data -> (State -> msg) -> Element msg
-pagingView state totalRows rows toMsg =
+pagingView : State -> (State -> msg) -> List data -> Element msg
+pagingView state toMsg rows =
     let
+        totalRows =
+            List.length rows
+
         lastIndex =
             case state.rowsPerPage of
                 Exactly t ->
@@ -421,10 +401,10 @@ applySorter isReversed sorter data =
 
         IncOrDec sortOp ->
             if isReversed then
-                List.reverse (sortOp data)
+                sortOp data
 
             else
-                sortOp data
+                List.reverse (sortOp data)
 
 
 findSorter : String -> List (Column data msg) -> Maybe (Sorter data)
