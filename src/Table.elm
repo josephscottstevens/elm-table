@@ -69,7 +69,7 @@ type alias Column data msg =
 stringColumn : String -> (data -> String) -> ColumnStyle -> Column data msg
 stringColumn header data columnStyle =
     { header = header
-    , viewData = data >> (\t -> Element.text t)
+    , viewData = \t -> Element.text (data t)
     , columnStyle = columnStyle
     , sorter = increasingOrDecreasingBy data
     , columnId = header
@@ -124,22 +124,22 @@ view state rows columns =
             List.length rows
     in
     Element.row []
-        [ Element.table
+        [ Element.indexedTable
             [ Element.centerX
             , Border.color (rgb255 55 55 55)
             , Border.widthEach { edges | bottom = 1 }
             , Border.solid
             ]
             { data = rows
-            , columns = List.indexedMap customColumn columns
+            , columns = List.map customColumn columns
             }
 
         --, viewPagination state.rowsPerPage
         ]
 
 
-customColumn : Int -> Column data msg -> Element.Column data msg
-customColumn idx column =
+customColumn : Column data msg -> Element.IndexedColumn data msg
+customColumn column =
     { header =
         Element.row []
             [ Element.el
@@ -156,7 +156,7 @@ customColumn idx column =
                 }
             ]
     , width = Element.fill
-    , view = column.viewData --\idx t -> Element.el (columnStyle idx) (Element.text (data t))
+    , view = \idx t -> Element.el (defaultColumnStyle idx) (column.viewData t)
     }
 
 
