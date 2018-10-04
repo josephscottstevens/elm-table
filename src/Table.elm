@@ -1,14 +1,4 @@
-module Table exposing (ColumnStyle(..), RowsPerPage(..), State, defaultColumnStyle, init, stringColumn, view)
-
---TODO
-{-
-   fix pagingView, showing up on right, and no pages are showing.
-
-   -- lower priority --
-   viewHeader bottom border only matching text
-   Columns jump around in widths on sort
-   Compare Styles to Jquery
--}
+module Table exposing (ColumnStyle(..), RowsPerPage(..), State, defaultColumnStyle, init, pagingView, stringColumn, view)
 
 import Common exposing (edges)
 import Element exposing (Element, rgb255)
@@ -109,18 +99,15 @@ view state toMsg rows columns =
         totalRows =
             List.length rows
     in
-    Element.row []
-        [ Element.indexedTable
-            [ Element.centerX
-            , Border.color (rgb255 55 55 55)
-            , Border.widthEach { edges | bottom = 1 }
-            , Border.solid
-            ]
-            { data = paginatedAndSortedRows
-            , columns = List.map (\column -> customColumn state toMsg column) columns
-            }
-        , pagingView state toMsg rows
+    Element.indexedTable
+        [ Element.centerX
+        , Border.color (rgb255 55 55 55)
+        , Border.widthEach { edges | bottom = 1 }
+        , Border.solid
         ]
+        { data = paginatedAndSortedRows
+        , columns = List.map (\column -> customColumn state toMsg column) columns
+        }
 
 
 customColumn : State -> (State -> msg) -> Column data msg -> Element.IndexedColumn data msg
@@ -156,12 +143,13 @@ viewHeader state toMsg column =
                 "https://www.datatables.net/media/images/sort_both.png"
     in
     Element.row
-        [ Events.onClick (updateSort state toMsg column.columnId) ]
+        [ Events.onClick (updateSort state toMsg column.columnId)
+        , Border.color (rgb255 55 55 55)
+        , Border.widthEach { edges | bottom = 1 }
+        , Border.solid
+        ]
         [ Element.el
-            [ Border.color (rgb255 55 55 55)
-            , Border.widthEach { edges | bottom = 1 }
-            , Border.solid
-            , Element.paddingXY 20 8
+            [ Element.paddingXY 20 8
             , Font.bold
             ]
             (Element.text column.header)
@@ -305,16 +293,16 @@ pagingView state toMsg rows =
 
         activeOrNot pageIndex =
             let
-                maybeClick =
+                textColor =
                     if pageIndex == state.pageIndex then
-                        Just (pagingStateClick (Index pageIndex))
+                        Font.color (Element.rgb 0 0 1)
 
                     else
-                        Nothing
+                        Font.color (Element.rgb 0 0 0)
             in
             Input.button []
-                { onPress = maybeClick
-                , label = Element.text (String.fromInt (pageIndex + 1))
+                { onPress = Just (pagingStateClick (Index pageIndex))
+                , label = Element.el [ textColor ] (Element.text (String.fromInt (pageIndex + 1)))
                 }
 
         rng =
@@ -352,25 +340,24 @@ pagingView state toMsg rows =
             else
                 Nothing
     in
-    Element.row []
+    Element.row [ Element.spacing 10, Element.paddingXY 0 10 ]
         [ Input.button []
             { onPress = firstPageClick
             , label = Element.text "First"
             }
-
-        -- , Input.button []
-        --     { onPress = leftPageClick
-        --     , label = Element.text "Previous"
-        --     }
-        --  Element.row [] rng
-        -- , Input.button []
-        --     { onPress = rightPageClick
-        --     , label = Element.text "Next"
-        --     }
-        -- , Input.button []
-        --     { onPress = lastPageClick
-        --     , label = Element.text "Last"
-        --     }
+        , Input.button []
+            { onPress = leftPageClick
+            , label = Element.text "Previous"
+            }
+        , Element.row [ Element.spacing 10 ] rng
+        , Input.button []
+            { onPress = rightPageClick
+            , label = Element.text "Next"
+            }
+        , Input.button []
+            { onPress = lastPageClick
+            , label = Element.text "Last"
+            }
         ]
 
 

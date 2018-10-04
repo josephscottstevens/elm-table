@@ -8,6 +8,7 @@ import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import Element.Lazy
+import Html exposing (Html)
 import People exposing (..)
 import Table
 
@@ -40,7 +41,12 @@ update msg model =
             { model | tableState = tableState }
 
 
+view : Model -> Html Msg
 view model =
+    let
+        rows =
+            filter model.searchText people
+    in
     Element.layout
         [ Font.size 18
         , Font.family
@@ -70,13 +76,14 @@ view model =
             , Table.view
                 model.tableState
                 UpdateTableState
-                (filter model.searchText people)
+                rows
                 [ Table.stringColumn "Name" .name Table.Auto
                 , Table.stringColumn "Phone" .phone Table.Auto
                 , Table.stringColumn "Company" .company Table.Auto
                 , Table.stringColumn "Address" .address Table.Auto
                 , Table.stringColumn "City" .city Table.Auto
                 ]
+            , Table.pagingView model.tableState UpdateTableState rows
             ]
 
 
