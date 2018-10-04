@@ -295,7 +295,7 @@ pagingView state toMsg rows =
             let
                 textColor =
                     if pageIndex == state.pageIndex then
-                        Font.color (Element.rgb 0 0 1)
+                        Font.color (Element.rgb255 63 81 181)
 
                     else
                         Font.color (Element.rgb 0 0 0)
@@ -340,7 +340,12 @@ pagingView state toMsg rows =
             else
                 Nothing
     in
-    Element.row [ Element.spacing 10, Element.paddingXY 0 10 ]
+    Element.row
+        [ Element.spacing 10
+        , Element.padding 10
+        , Background.color (Element.rgb255 240 240 240)
+        , Element.width Element.fill
+        ]
         [ Input.button []
             { onPress = firstPageClick
             , label = Element.text "First"
