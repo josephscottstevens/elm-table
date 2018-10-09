@@ -118,15 +118,6 @@ customColumn state toMsg column =
     }
 
 
-updateSort : State -> (State -> msg) -> String -> msg
-updateSort state toMsg columnId =
-    if state.sortField == columnId && state.sortAscending == False then
-        toMsg { state | sortAscending = False, sortField = "" }
-
-    else
-        toMsg { state | sortAscending = not state.sortAscending, sortField = columnId }
-
-
 viewHeader : State -> (State -> msg) -> Column data msg -> Element msg
 viewHeader state toMsg column =
     let
@@ -147,6 +138,7 @@ viewHeader state toMsg column =
         , Border.color (rgb255 55 55 55)
         , Border.widthEach { edges | bottom = 1 }
         , Border.solid
+        , Element.pointer
         ]
         [ Element.el
             [ Element.paddingXY 20 8
@@ -276,33 +268,41 @@ pagerText state totalRows =
 
 pagingView : State -> (State -> msg) -> List data -> Element msg
 pagingView state toMsg rows =
+    case state.rowsPerPage of
+        Exactly t ->
+            pagingViewHelper state toMsg rows (List.length rows // t)
+
+        All ->
+            Element.none
+
+
+pagingViewHelper : State -> (State -> msg) -> List data -> Int -> Element msg
+pagingViewHelper state toMsg rows lastIndex =
     let
         totalRows =
             List.length rows
-
-        lastIndex =
-            case state.rowsPerPage of
-                Exactly t ->
-                    totalRows // t
-
-                All ->
-                    0
 
         pagingStateClick page =
             setPagingState state totalRows toMsg page
 
         activeOrNot pageIndex =
             let
-                textColor =
+                labelStyle =
                     if pageIndex == state.pageIndex then
-                        Font.color (Element.rgb255 63 81 181)
+                        [ Font.color (Element.rgb255 63 81 181)
+                        , Background.color (Element.rgb255 230 230 230)
+                        , Element.padding 2
+                        , Border.solid
+                        , Border.width 1
+                        , Border.color (Element.rgb255 50 50 50)
+                        ]
 
                     else
-                        Font.color (Element.rgb 0 0 0)
+                        [ Font.color (Element.rgb 0 0 0) ]
             in
             Input.button []
                 { onPress = Just (pagingStateClick (Index pageIndex))
-                , label = Element.el [ textColor ] (Element.text (String.fromInt (pageIndex + 1)))
+                , label = Element.el labelStyle (Element.text (String.fromInt (pageIndex + 1)))
                 }
 
         rng =
@@ -373,6 +373,15 @@ pagingView state toMsg rows =
 type Sorter data
     = None
     | IncOrDec (List data -> List data)
+
+
+updateSort : State -> (State -> msg) -> String -> msg
+updateSort state toMsg columnId =
+    if state.sortField == columnId && state.sortAscending == False then
+        toMsg { state | sortAscending = False, sortField = "" }
+
+    else
+        toMsg { state | sortAscending = not state.sortAscending, sortField = columnId }
 
 
 sort : State -> List (Column data msg) -> List data -> List data

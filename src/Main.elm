@@ -22,7 +22,7 @@ type alias Model =
 emptyModel : Model
 emptyModel =
     { searchText = ""
-    , tableState = Table.init "Name" (Table.Exactly 10)
+    , tableState = Table.init "Name" (Table.Exactly 10) --Table.All
     }
 
 
@@ -60,7 +60,7 @@ view model =
     <|
         column [ width fill, padding 40 ]
             [ row [ centerY ]
-                [ Input.text [ Font.size 12 ]
+                [ Input.text []
                     { onChange = UpdateSearch
                     , text = model.searchText
                     , placeholder = Nothing
@@ -68,7 +68,6 @@ view model =
                         Input.labelLeft
                             [ centerY
                             , paddingXY 8 2
-                            , Font.size 18
                             ]
                             (text "Search: ")
                     }

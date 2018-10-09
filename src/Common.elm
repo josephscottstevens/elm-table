@@ -5,7 +5,7 @@ formatString : String -> String
 formatString str =
     str
         |> String.toLower
-        |> String.filter Char.isAlpha
+        |> String.filter Char.isAlphaNum
 
 
 edges =
